@@ -1,7 +1,7 @@
 class WebSitesController < ApplicationController
   def scrap
-    @result = `python app/scrappers/amazon.py`
+    @best_products = `python3 app/scrappers/main.py`
 
-    p @result
+    render json: @best_products
   end
 end

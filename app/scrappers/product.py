@@ -8,17 +8,17 @@ class Product:
 		self.rating = rating
 		self.score = 0
 
-	def setScore(self, score):
-		self.score = score
+	def calculateScore(self, normalizedRate, normalizedTotalPrice):
+		self.score = normalizedRate - normalizedTotalPrice
 
 	def totalPrice(self):
-		return self.parsePrice(self.price)+ self.parsePrice(self.deliveryPrice[1:])
+		return self.parsePrice(self.price)+ self.parsePrice(self.deliveryPrice)
 
 	def parsePrice(self, price):
 		return float(price[1:].replace(',', ''))
 
 
-	def getDataAsJson(self):
+	def toJson(self):
 		data = { 
 			'price': self.price, 
 			'deliveryPrice': self.deliveryPrice, 
