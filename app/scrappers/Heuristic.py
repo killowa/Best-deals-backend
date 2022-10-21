@@ -14,7 +14,7 @@ class Heuristic:
 		minTotalPrice, maxTotalPrice = min(totalPrices), max(totalPrices)
 
 		if len(self.products) == 0: #TODO: Normalize on all sites
-			product.calculateScore(totalPrices[0], ratings[0])
+			product.setScore(ratings[0] - totalPrices[0])
 			return
 
 		for product in self.products:
@@ -22,7 +22,7 @@ class Heuristic:
 			normalizedTotalPrice = (product.totalPrice() - minTotalPrice)/(maxTotalPrice-minTotalPrice)
 			normalizedRate = (product.rating - minRate)/(maxRate-minRate)
 
-			product.calculateScore(normalizedRate, normalizedTotalPrice)
+			product.setScore(normalizedRate - normalizedTotalPrice)
 
 
 	def calculateRatingScore(self, rates, numberOfReviews):

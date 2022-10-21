@@ -3,14 +3,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
 from helpers import fetchElement, fetchElements, percentToFraction, doesItemMatchesSearchKeys
 from product import Product
 from Heuristic import Heuristic
 from CssSelctors import selectors
+import sys
 
 def formatPrice(price):
 	return '.'.join(price.splitlines())
@@ -39,8 +36,7 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), chro
 driver.get('https://www.amazon.com/')
 
 search = fetchElement(driver, selectors['SEARCH_BAR'])
-
-SEARCH_KEYS = 'dell g15' # TODO: read this from user input in our site
+SEARCH_KEYS = ' '.join(sys.argv[1:])
 
 search.send_keys(SEARCH_KEYS)
 search.send_keys(Keys.RETURN)
