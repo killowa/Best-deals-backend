@@ -16,7 +16,7 @@ class Product:
 		return self.parsePrice(self.price)+ self.parsePrice(self.deliveryPrice)
 
 	def parsePrice(self, price):
-		return float(price[1:].replace(',', ''))
+		return float(price[3:].replace(',', ''))
 
 
 	def toJson(self):

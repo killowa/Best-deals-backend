@@ -25,11 +25,10 @@ options = Options()
 options.headless = False
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
 
-driver.get('https://www.amazon.com/')
+driver.get('https://www.amazon.eg/-/en')
 
 search = fetchElement(driver, selectors['SEARCH_BAR'])
-# SEARCH_KEYS = ' '.join(sys.argv[1:])
-SEARCH_KEYS='dell g15'
+SEARCH_KEYS = ' '.join(sys.argv[1:])
 
 search.send_keys(SEARCH_KEYS)
 search.send_keys(Keys.RETURN)
@@ -43,7 +42,7 @@ heuristic = Heuristic(products)
 for result in filtered_results:
 
   # Default values for none mandatory elems
-  deliveryPrice = "$0"
+  deliveryPrice = "EGP0"
   imageUrl = ""
 
   # Selenium elements for required product data
@@ -65,7 +64,6 @@ for result in filtered_results:
   reviewsCount = reviews_count_elem.text[1:-1]
 
   product = Product(productPrice, deliveryPrice, float(rate), int(reviewsCount), imageUrl)
-  print(product.toJson())
   products.append(product)
 
 heuristic.normalize()
@@ -73,6 +71,7 @@ heuristic.normalize()
 productsData = []
 for product in products: productsData.append(product.toJson())
 
+print(productsData)
 driver.quit()
 
 

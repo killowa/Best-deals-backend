@@ -6,8 +6,10 @@ class Heuristic:
     self.products = products
 
   def normalize(self):
+    weights = [-9, -3, 0, 3, 9]    
+
     totalPrices = [product.totalPrice() for product in self.products]
-    ratesScore = [product.rate * product.reviewsCount for product in self.products]
+    ratesScore = [weights[round(product.rate-1)] * product.reviewsCount for product in self.products]
 
     minRateScore, maxRateScore = min(ratesScore), max(ratesScore)
     minTotalPrice, maxTotalPrice = min(totalPrices), max(totalPrices)
@@ -19,8 +21,6 @@ class Heuristic:
     for product in self.products:
       max_min_price_diff = maxTotalPrice-minTotalPrice
       max_min_rate_diff = maxRateScore-minRateScore
-
-      weights = [-9, -3, 0, 3, 9]    
 
       normalizedTotalPrice = 1
       normalizedRate = 1
