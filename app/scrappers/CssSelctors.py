@@ -1,9 +1,9 @@
 selectors = {
-	'IMAGE': '#landingImage',
-	'PRODUCT_PRICE': '#corePrice_feature_div > div > span > span:nth-child(2)',
-	'DELIVERY_PRICE': '#mir-layout-DELIVERY_BLOCK-slot-NO_PROMISE_UPSELL_MESSAGE',
-	'RATING': '#histogramTable [aria-valuenow]',
-	'REVIEWS_COUNT': '#acrCustomerReviewText',
+	'IMAGE': '.s-image',
+	'PRODUCT_PRICE': '.a-price [aria-hidden="true"]',
+	'DELIVERY_PRICE': '.a-row.a-size-base.a-color-secondary.s-align-children-center [aria-label]',
+	'RATE': '.a-row.a-size-small .a-size-base',
+	'REVIEWS_COUNT': '.a-link-normal.s-link-style .s-underline-text',
 	'SEARCH_BAR': '#twotabsearchtextbox',
 	'HEADER': 'h2.a-size-mini'
 }

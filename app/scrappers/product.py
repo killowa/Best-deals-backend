@@ -1,11 +1,12 @@
 import json
 
 class Product:
-	def __init__(self, price, deliveryPrice, rating, imageUrl):
+	def __init__(self, price, deliveryPrice, rate, reviewsCount, imageUrl):
 		self.price = price
 		self.deliveryPrice = deliveryPrice
 		self.imageUrl = imageUrl
-		self.rating = rating
+		self.reviewsCount = reviewsCount
+		self.rate = rate
 		self.score = 0
 
 	def setScore(self, score):
@@ -22,9 +23,10 @@ class Product:
 		data = { 
 			'price': self.price, 
 			'deliveryPrice': self.deliveryPrice, 
-			'rating': self.rating, 
+			'rate': self.rate, 
 			'score': self.score,
-			'imageUrl': self.imageUrl
+			'imageUrl': self.imageUrl,
+			'reviewsCount': self.reviewsCount
 		}
 
 		return json.dumps(data)

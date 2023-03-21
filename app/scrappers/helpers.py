@@ -7,14 +7,14 @@ def fetchElement(root, cssSelector):
 		element =  WebDriverWait(root, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, cssSelector)))
 		return element
 	except:
-		return False
+		return None
 
 def fetchElements(root, cssSelector):
 	try:
 		element =  WebDriverWait(root, 3).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, cssSelector)))
 		return element
 	except:
-		return False
+		return None
 
 def percentToFraction(percent):
 

@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
-from helpers import fetchElement, fetchElements, percentToFraction, containsKeys
+from helpers import fetchElement, fetchElements, containsKeys
 from product import Product
 from Heuristic import Heuristic
 from CssSelctors import selectors
@@ -42,24 +42,37 @@ heuristic = Heuristic(products)
 
 for result in filtered_results:
 
-	productPrice = formatPrice(fetchElement(driver, selectors['PRODUCT_PRICE']).text) if fetchElement(driver, selectors['PRODUCT_PRICE']) else 0
-	deliveryPrice = formatDeliveryPrice(fetchElement(driver, selectors['DELIVERY_PRICE']).text) if fetchElement(driver, selectors['DELIVERY_PRICE']) else 0
-	imageUrl = fetchElement(driver, selectors['IMAGE']).get_attribute('src')
-	numberOfReviews = fetchElement(driver, selectors['REVIEWS_COUNT']).text.split()[0] if fetchElement(driver, selectors['REVIEWS_COUNT']) else 0
-	
-	rates = fetchElements(driver, selectors['RATE'])
+  # Default values for none mandatory elems
+  deliveryPrice = "$0"
+  imageUrl = ""
 
-	if not productPrice or not numberOfReviews: continue
+  # Selenium elements for required product data
+  product_price_elem = fetchElement(result, selectors['PRODUCT_PRICE'])
+  delivery_price_elem = fetchElement(result, selectors['DELIVERY_PRICE'])
+  rate_elem = fetchElement(result, selectors['RATE'])
+  reviews_count_elem = fetchElement(result, selectors['REVIEWS_COUNT'])
+  image_elem = fetchElement(result, selectors['IMAGE'])
 
-	product = Product(productPrice, deliveryPrice, heuristic.calculateRatingScore(rates, numberOfReviews), imageUrl)
-	products.append(product)
+  mandatory_elems = [product_price_elem, rate_elem, reviews_count_elem]
+
+  if None in mandatory_elems: continue
+
+  # Data
+  if delivery_price_elem and delivery_price_elem.text.isnumeric(): deliveryPrice = formatDeliveryPrice(delivery_price_elem.text)
+  if image_elem: imageUrl = image_elem.get_attribute('src')
+  productPrice = formatPrice(product_price_elem.text)
+  rate = rate_elem.text
+  reviewsCount = reviews_count_elem.text[1:-1]
+
+  product = Product(productPrice, deliveryPrice, float(rate), int(reviewsCount), imageUrl)
+  print(product.toJson())
+  products.append(product)
 
 heuristic.normalize()
 
 productsData = []
 for product in products: productsData.append(product.toJson())
 
-print(productsData)
 driver.quit()
 
 
