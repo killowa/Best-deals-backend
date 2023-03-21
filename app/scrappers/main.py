@@ -12,17 +12,8 @@ import sys
 def formatPrice(price):
 	return '.'.join(price.splitlines())
 
-def filterResultsWithSearchKeys(search_results, searchKeys):
-  filtered_results = []
-
-  # return []
-  for result in search_results:
-
-    result_header = fetchElement(result, selectors['HEADER'])#
-    if containsKeys(result_header.text, searchKeys):
-      filtered_results.append(fetchElement(result, 'a').get_attribute('href'))#
-
-  return filtered_results
+def filterWithKeys(search_results, keys):
+  return [res for res in search_results if containsKeys(fetchElement(res, selectors['HEADER']).text, keys)]
 
 def formatDeliveryPrice(deliveryPrice):
 
@@ -44,14 +35,12 @@ search.send_keys(SEARCH_KEYS)
 search.send_keys(Keys.RETURN)
 
 search_results = fetchElements(driver, '[data-component-type="s-search-result"]')
-filtered_results_url = filterResultsWithSearchKeys(search_results, SEARCH_KEYS)
+filtered_results = filterWithKeys(search_results, SEARCH_KEYS)
 
 products = []
 heuristic = Heuristic(products)
 
-for result_url in filtered_results_url:
-
-	driver.get(result_url)
+for result in filtered_results:
 
 	productPrice = formatPrice(fetchElement(driver, selectors['PRODUCT_PRICE']).text) if fetchElement(driver, selectors['PRODUCT_PRICE']) else 0
 	deliveryPrice = formatDeliveryPrice(fetchElement(driver, selectors['DELIVERY_PRICE']).text) if fetchElement(driver, selectors['DELIVERY_PRICE']) else 0
