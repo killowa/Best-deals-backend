@@ -20,14 +20,9 @@ def percentToFraction(percent):
 
 	return int(percent)/100
 
-def doesItemMatchesSearchKeys(text, searchKeys):
-	searchKeys = searchKeys.split(" ")
-	text = text.lower()
+def containsKeys(text, searchKeys):
+	for searchKey in searchKeys.split(" "):
+		if text.lower().find(searchKey.lower()) == -1:
+			return False
 
-	for searchKey in searchKeys:
-		searchKeyWithSpaceBefore = ' ' + searchKey.lower()
-		searchKeyWithSpaceAfter = searchKey.lower() + ' '
-		if text.find(searchKeyWithSpaceAfter) == -1 and text.find(searchKeyWithSpaceBefore) == -1:
-			return ""
-
-	return text
+	return True
