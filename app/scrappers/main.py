@@ -30,7 +30,7 @@ def formatDeliveryPrice(deliveryPrice):
 	return deliveryPrice.split()[0]
 
 options = Options()
-options.headless = True
+options.headless = False
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
 
 driver.get('https://www.amazon.com/')
@@ -51,12 +51,12 @@ for result_url in filtered_results_url:
 
 	driver.get(result_url)
 
-	productPrice = formatPrice(fetchElement(driver, selectors['PRODUCT_PRICE_SELECTOR']).text) if fetchElement(driver, selectors['PRODUCT_PRICE_SELECTOR']) else 0
-	deliveryPrice = formatDeliveryPrice(fetchElement(driver, selectors['DELIVERY_PRICE_SELECTOR']).text) if fetchElement(driver, selectors['DELIVERY_PRICE_SELECTOR']) else 0
-	imageUrl = fetchElement(driver, selectors['IMAGE_SELECTOR']).get_attribute('src')
-	numberOfReviews = fetchElement(driver, selectors['NUMBER_OF_REVIWES_SELECTOR']).text.split()[0] if fetchElement(driver, selectors['NUMBER_OF_REVIWES_SELECTOR']) else 0
+	productPrice = formatPrice(fetchElement(driver, selectors['PRODUCT_PRICE']).text) if fetchElement(driver, selectors['PRODUCT_PRICE']) else 0
+	deliveryPrice = formatDeliveryPrice(fetchElement(driver, selectors['DELIVERY_PRICE']).text) if fetchElement(driver, selectors['DELIVERY_PRICE']) else 0
+	imageUrl = fetchElement(driver, selectors['IMAGE']).get_attribute('src')
+	numberOfReviews = fetchElement(driver, selectors['REVIEWS_COUNT']).text.split()[0] if fetchElement(driver, selectors['REVIEWS_COUNT']) else 0
 	
-	rates = [rate.get_attribute('aria-valuenow')[:-1] for rate in fetchElements(driver, selectors['RATING_SELECTOR'])]#
+	rates = fetchElements(driver, selectors['RATE'])
 
 	if not productPrice or not numberOfReviews: continue
 

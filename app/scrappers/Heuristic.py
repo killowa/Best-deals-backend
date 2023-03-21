@@ -20,18 +20,6 @@ class Heuristic:
 		for product in self.products:
 
 			normalizedTotalPrice = (product.totalPrice() - minTotalPrice)/(maxTotalPrice-minTotalPrice)
-			normalizedRate = (product.rating - minRate)/(maxRate-minRate)
+			normalizedRate = (product.rate * product.reviewersCount - minRate)/(maxRate-minRate)
 
 			product.setScore(normalizedRate - normalizedTotalPrice)
-
-
-	def calculateRatingScore(self, rates, numberOfReviews):
-		weights = [9, 3, 1, -3, -9] # Increasing weight as rate increase
-
-		totalRateScore = 0
-
-		for rate, weight in zip(rates, weights):
-			rateScore = weight*percentToFraction(rate)*int(numberOfReviews)
-			totalRateScore = totalRateScore + rateScore
-
-		return round(totalRateScore, 3)
