@@ -1,48 +1,74 @@
-import requests
-from bs4 import BeautifulSoup
+import resource
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+from webdriver_manager.chrome import ChromeDriverManager
+# from noonProduct import Product
+# from Heuristic import Heuristic
+import sys
 
-noon = "https://www.noon.com/egypt-en/search/?q="
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+# PATH = "/usr/local/bin/chromedriver"
+# driver = webdriver.Chrome(PATH)
+driver.get('https://www.noon.com/egypt-en/')
+driver.implicitly_wait(10)
 
-def scraping(searchRequest):
-    req = requests.get(searchRequest)
-    # print(url.status_code)
-    soup = BeautifulSoup(req.content,"html.parser")
-    # print(soup.prettify())
-    names=[]
-    prices=[]
-    links=[]
-    rates=[]
-    productNames=soup.find_all('div',{'data-qa':'product-name'})
-    productPrices=soup.find_all('div',{'class':'sc-ac248257-1 bEaNkb'})
-    productLinks=soup.find_all('span',{'class':'sc-5e739f1b-0 gEERDr wrapper productContainer'})
-    productRating=soup.find_all('span',{'class':'ratingValue'})
-    for n in productNames[:5]:
-        name=n.span.get_text()
-        names.append(name)
+search = driver.find_element(By.CSS_SELECTOR, 'input[id]')
+SEARCH_KEYS = ' '.join(sys.argv[1:])
+search.send_keys(SEARCH_KEYS)
+search.send_keys(Keys.RETURN)
 
-    for p in productPrices[:5]:
-        price=p.strong.get_text()
-        prices.append(price)
+names=[]
+prices=[]
+links=[]
+rates=[]
+peopleRates=[]
+products=[]
+# heuristic = Heuristic(products)
+#CSS SELECTORS
+# div[data-qa='product-name']
+# strong[class='amount']
+# span[class='sc-5e739f1b-0 gEERDr wrapper productContainer  ']>a
+# div[class='sc-61515602-0 czLWQH']
 
-    for l in productLinks[:5]:
-        link="https://www.noon.com"+l.a['href']
-        links.append(link)
+productNames = driver.find_elements(By.CSS_SELECTOR,"div[data-qa='product-name']")
+productPrices = driver.find_elements(By.CSS_SELECTOR,"strong[class='amount']")
+productHref = driver.find_elements(By.CSS_SELECTOR,"span[class='sc-5e739f1b-0 gEERDr wrapper productContainer  ']>a")
+productRates = driver.find_elements(By.CSS_SELECTOR,"div[class='sc-61515602-0 czLWQH']")
 
-    for r in productRating[:5]:
-        rate=r.get_text()
-        rates.append(rate)    
+for name in productNames:
+    names.append(name.get_attribute("title"))
+for price in productPrices:
+    prices.append(price.text)  
+for link in productHref:
+    links.append(link.get_attribute("href"))
+for r in productRates:
+    rate=r.text.split('\n', 1)[0]
+    if rate =='':
+        rate=0
+        numOfRates=0
+    else:
+        numOfRates=r.text.split('\n', 1)[1]
+    rates.append(rate)
+    peopleRates.append(numOfRates)
 
-    # print(len(names))
+products=zip(names,prices,links,rates,peopleRates)
+for product in list(products):
+    print(product)
+    print('-'*50)
+
+# for i in range(len(names)):
+#     product = Product(float(prices[i]), 0, float(rates[i]), 0)
+#     products.append(product)
 
 
-    # zip the names, prices, link, rating, and image of the products
-    devices=zip(names,prices,links,rates)
-    for device in list(devices):
-        print(device)
-        print('-'*50)
+# heuristic.normalize()
 
+# productsData = []
+# for product in products: productsData.append(product.toJson())
 
-item = input("search: ")
-url=noon+item
-print(url)
-scraping(url)
+# print(productsData)
