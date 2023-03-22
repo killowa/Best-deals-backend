@@ -3,23 +3,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
-from helpers import fetchElement, fetchElements, containsKeys
+from helpers import fetchElement, fetchElements, containsKeys, formatPrice, filterWithKeys, formatDeliveryPrice
 from product import Product
 from Heuristic import Heuristic
 from CssSelctors import selectors
 import sys
-
-def formatPrice(price):
-	return '.'.join(price.splitlines())
-
-def filterWithKeys(search_results, keys):
-  return [res for res in search_results if containsKeys(fetchElement(res, selectors['HEADER']).text, keys)]
-
-def formatDeliveryPrice(deliveryPrice):
-
-	if deliveryPrice == '': return 0
-
-	return deliveryPrice.split()[0]
 
 options = Options()
 options.headless = False

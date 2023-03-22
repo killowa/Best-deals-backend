@@ -16,9 +16,17 @@ def fetchElements(root, cssSelector):
 	except:
 		return None
 
-def percentToFraction(percent):
+def formatPrice(price):
+	return '.'.join(price.splitlines())
 
-	return int(percent)/100
+def filterWithKeys(search_results, keys):
+  return [res for res in search_results if containsKeys(fetchElement(res, selectors['HEADER']).text, keys)]
+
+def formatDeliveryPrice(deliveryPrice):
+
+	if deliveryPrice == '': return 0
+
+	return deliveryPrice.split()[0]
 
 def containsKeys(text, searchKeys):
 	for searchKey in searchKeys.split(" "):
