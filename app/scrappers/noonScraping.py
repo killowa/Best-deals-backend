@@ -7,8 +7,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
-# from noonProduct import Product
-# from Heuristic import Heuristic
+from noonProduct import Product
+from Heuristic import Heuristic
 import sys
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -28,7 +28,7 @@ links=[]
 rates=[]
 peopleRates=[]
 products=[]
-# heuristic = Heuristic(products)
+heuristic = Heuristic(products)
 #CSS SELECTORS
 # div[data-qa='product-name']
 # strong[class='amount']
