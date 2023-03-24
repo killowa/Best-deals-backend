@@ -61,14 +61,14 @@ for product in list(products):
     print(product)
     print('-'*50)
 
-# for i in range(len(names)):
-#     product = Product(float(prices[i]), 0, float(rates[i]), 0)
-#     products.append(product)
+for i in range(len(names)):
+    product = Product(float(prices[i]), 0, float(rates[i]),int(numOfRates[i]), 0)
+    products.append(product)
 
 
-# heuristic.normalize()
+heuristic.normalize()
 
-# productsData = []
-# for product in products: productsData.append(product.toJson())
+productsData = []
+for product in products: productsData.append(product.toJson())
 
-# print(productsData)
+print(productsData)
