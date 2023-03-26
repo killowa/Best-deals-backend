@@ -1,5 +1,3 @@
-from helpers import percentToFraction
-
 class Heuristic:
 
   def __init__(self, products):
