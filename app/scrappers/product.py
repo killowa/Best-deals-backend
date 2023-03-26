@@ -21,9 +21,9 @@ class Product:
 			'score': self.score,
 			'imageUrl': self.imageUrl,
 			'reviewsCount': self.reviewsCount,
-			'header': self.header,
 			'link': self.link,
-			'source': self.source
+			'source': self.source,
+			'header': self.header,
 		}
 
 		return json.dumps(data)

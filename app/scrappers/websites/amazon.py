@@ -45,6 +45,7 @@ def scrap(search_keys):
     productPrice = formatPrice(product_price_elem.text)
     rate = rate_elem.text
     header = header_elem.text
+    header = header.replace('"', '')
     link = fetchElement(header_elem, 'a').get_attribute('href')
     reviewsCount = reviews_count_elem.text[1:-1]
 
