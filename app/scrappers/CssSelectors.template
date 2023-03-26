@@ -1,0 +1,9 @@
+selectors = {
+	'IMAGE': '',
+	'PRODUCT_PRICE': '',
+	'DELIVERY_PRICE': '',
+	'RATE': '',
+	'REVIEWS_COUNT': '',
+	'SEARCH_BAR': '',
+	'HEADER': ''
+}

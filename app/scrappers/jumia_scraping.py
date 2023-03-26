@@ -7,6 +7,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from jumia_product import Product
 
+print(sys.path)
+
 product_containers = None
 
 def scrape_description(driver,descriptions):

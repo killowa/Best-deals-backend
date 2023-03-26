@@ -27,7 +27,7 @@ class Api::V1::ProductsController < ApplicationController
         return json_response({ error: "This item has already been searched" })
       end
   
-      scraped_jumia = `python3 app/scrapers/jumia_scraping.py "#{params[:search_key]}"`
+      scraped_jumia = `python3 app/scrappers/jumia_scraping.py "#{params[:search_key]}"`
       @jumia_products = JSON.parse(scraped_jumia)
   
       # render :text => @jumia_products.class
