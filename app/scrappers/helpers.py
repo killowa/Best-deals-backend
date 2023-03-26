@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from CssSelctors import selectors
 
 def fetchElement(root, cssSelector):
 	try:
@@ -16,9 +17,17 @@ def fetchElements(root, cssSelector):
 	except:
 		return None
 
-def percentToFraction(percent):
+def formatPrice(price):
+	return '.'.join(price.splitlines())
 
-	return int(percent)/100
+def filterWithKeys(search_results, keys):
+  return [res for res in search_results if containsKeys(fetchElement(res, selectors['HEADER']).text, keys)]
+
+def formatDeliveryPrice(deliveryPrice):
+
+	if deliveryPrice == '': return 0
+
+	return deliveryPrice.split()[0]
 
 def containsKeys(text, searchKeys):
 	for searchKey in searchKeys.split(" "):
@@ -26,3 +35,7 @@ def containsKeys(text, searchKeys):
 			return False
 
 	return True
+
+def get_file_path(file_name):
+  root_dir = '/home/mazen/ssp/term 9/BestDeals/backend/app/scrappers/'
+  return root_dir + file_name

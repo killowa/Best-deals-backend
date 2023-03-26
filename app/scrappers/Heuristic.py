@@ -1,5 +1,3 @@
-from helpers import percentToFraction
-
 class Heuristic:
 
   def __init__(self, products):
@@ -8,7 +6,7 @@ class Heuristic:
   def normalize(self):
     weights = [-9, -3, 0, 3, 9]    
 
-    totalPrices = [product.totalPrice() for product in self.products]
+    totalPrices = [product.price for product in self.products]
     ratesScore = [weights[round(product.rate-1)] * product.reviewsCount for product in self.products]
 
     minRateScore, maxRateScore = min(ratesScore), max(ratesScore)
@@ -26,7 +24,7 @@ class Heuristic:
       normalizedRate = 1
 
       if max_min_price_diff != 0:
-        normalizedTotalPrice = (product.totalPrice() - minTotalPrice)/(max_min_price_diff)
+        normalizedTotalPrice = (product.price - minTotalPrice)/(max_min_price_diff)
       if max_min_price_diff != 0:
         normalizedRate = (weights[round(product.rate-1)] * product.reviewsCount - minRateScore)/(max_min_rate_diff)
 
