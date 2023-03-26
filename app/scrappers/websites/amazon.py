@@ -27,13 +27,11 @@ def scrap(search_keys):
   for result in filtered_results:
 
     # Default values for none mandatory elems
-    deliveryPrice = "EGP0"
     imageUrl = ""
 
     # Selenium elements for required product data
     product_price_elem = fetchElement(result, selectors['PRODUCT_PRICE'])
     header_elem = fetchElement(result, selectors['HEADER'])
-    delivery_price_elem = fetchElement(result, selectors['DELIVERY_PRICE'])
     rate_elem = fetchElement(result, selectors['RATE'])
     reviews_count_elem = fetchElement(result, selectors['REVIEWS_COUNT'])
     image_elem = fetchElement(result, selectors['IMAGE'])
@@ -43,7 +41,6 @@ def scrap(search_keys):
     if None in mandatory_elems: continue
 
     # Data
-    if delivery_price_elem and delivery_price_elem.text.isnumeric(): deliveryPrice = formatDeliveryPrice(delivery_price_elem.text)
     if image_elem: imageUrl = image_elem.get_attribute('src')
     productPrice = formatPrice(product_price_elem.text)
     rate = rate_elem.text
@@ -51,7 +48,7 @@ def scrap(search_keys):
     link = fetchElement(header_elem, 'a').get_attribute('href')
     reviewsCount = reviews_count_elem.text[1:-1]
 
-    product = Product(productPrice, deliveryPrice, float(rate), int(reviewsCount), imageUrl, header, 'amazon', link)
+    product = Product(float(productPrice[3:].replace(',', '')), float(rate), int(reviewsCount), imageUrl, header, 'amazon', link)
     products.append(product)
 
   return products
