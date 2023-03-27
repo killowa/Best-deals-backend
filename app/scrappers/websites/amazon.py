@@ -12,12 +12,11 @@ def scrap(search_keys):
   options.headless = False
   driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
 
-  driver.get('https://www.amazon.eg/-/en')
+  
+  #spearate search keys with plus
+  search_keys = search_keys.replace(" ", "+")
 
-  search = fetchElement(driver, selectors['SEARCH_BAR'])
-
-  search.send_keys(search_keys)
-  search.send_keys(Keys.RETURN)
+  driver.get('https://www.amazon.eg/s?k='+search_keys)
 
   search_results = fetchElements(driver, '[data-component-type="s-search-result"]')
   filtered_results = filterWithKeys(search_results, search_keys)
@@ -49,7 +48,7 @@ def scrap(search_keys):
     link = fetchElement(header_elem, 'a').get_attribute('href')
     reviewsCount = reviews_count_elem.text[1:-1]
 
-    product = Product(float(productPrice[3:].replace(',', '')), float(rate), int(reviewsCount), imageUrl, header, 'amazon', link)
+    product = Product(float(productPrice[3:].replace(',', '')), float(rate), int(reviewsCount.replace(',', '')), imageUrl, header, 'amazon', link)
     products.append(product)
 
   return products

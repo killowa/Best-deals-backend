@@ -1,7 +1,9 @@
 import sys
-root_dir = '/home/mazen/ssp/term 9/BestDeals/backend/app/scrappers'
+
+root_dir = 'app/scrappers'
 sys.path.append(root_dir)
 
+import json
 from Heuristic import Heuristic
 from helpers import get_file_path
 from os import listdir
@@ -21,6 +23,6 @@ heuristic = Heuristic(products)
 heuristic.normalize()
 
 productsData = []
-for product in products: productsData.append(product.toJson())
+for product in products: productsData.append(json.loads(product.toJson()))
 
-print(productsData)
+print(productsData[0])

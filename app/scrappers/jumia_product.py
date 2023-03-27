@@ -2,8 +2,8 @@ import json
 
 
 class Product:
-    def __init__(self, name, price, link, rate, reviewsCount, imageUrl):
-        self.name = name
+    def __init__(self, header, price, link, rate, reviewsCount, imageUrl):
+        self.header = header
         self.price = price
         self.link = link
         self.imageUrl = imageUrl
@@ -19,7 +19,7 @@ class Product:
 
     def toJson(self):
         data = {
-            'name': self.name,
+            'header': self.header,
             'price': self.price,
             'link': self.link,
             'rating': self.rate,

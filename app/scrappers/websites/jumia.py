@@ -5,9 +5,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
-from jumia_product import Product
+from product import Product
 
-print(sys.path)
+# print(sys.path)
 
 product_containers = None
 
@@ -52,7 +52,7 @@ def scrape_next(driver):
     next_pg.click()
 
 
-def scrape(search_key):
+def scrap(search_key):
 
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
@@ -92,22 +92,27 @@ def scrape(search_key):
     # print(len(descriptions), len(prices), len(ratings), len(imgs), len(links),len(reviews_count), len(imgs))
 
     # create list of Product objects
-    products = [Product(descriptions[i], prices[i], links[i], ratings[i],
-                        reviews_count[i], imgs[i]) for i in range(len(descriptions))]
-    products_json = []
+    products = [Product(prices[i], ratings[i], reviews_count[i], imgs[i], descriptions[i], "jumia", links[i]
+                        ) for i in range(len(descriptions))]
+    
+    
+    return products
 
-    # print first product details
-    for i in range(len(products)):
-        products_json.append(json.loads(products[i].toJson()))
+    # products_json = []
 
-    # print poducts_json as a JSON string to be sent to the API endpoint
-    print(json.dumps(products_json, indent=4))
+    # # print first product details
+    # for i in range(len(products)):
+        
+    #     products_json.append(json.loads(products[i].toJson()))
 
-    driver.quit()
+    # # print poducts_json as a JSON string to be sent to the API endpoint
+    # print(json.dumps(products_json, indent=4))
+
+    # driver.quit()
 
 
 
 if __name__ == '__main__':
     #take everything after file name
     # scrape(sys.argv[1:])
-    scrape(sys.argv[1:])
+    scrap(sys.argv[1:])

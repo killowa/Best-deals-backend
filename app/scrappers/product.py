@@ -16,14 +16,14 @@ class Product:
 
 	def toJson(self):
 		data = { 
-			'price': self.price, 
-			'rate': self.rate, 
-			'score': self.score,
-			'imageUrl': self.imageUrl,
-			'reviewsCount': self.reviewsCount,
-			'link': self.link,
-			'source': self.source,
-			'header': self.header,
+			"price": self.price, 
+			"rate": self.rate, 
+			"score": self.score,
+			"imageUrl": self.imageUrl,
+			"reviewsCount": self.reviewsCount,
+			"link": self.link,
+			"source": self.source,
+			"header": self.header,
 		}
 
 		return json.dumps(data)

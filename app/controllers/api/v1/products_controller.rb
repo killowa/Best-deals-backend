@@ -27,7 +27,8 @@ class Api::V1::ProductsController < ApplicationController
         return json_response({ error: "This item has already been searched" })
       end
   
-      scraped_jumia = `python3 app/scrappers/jumia_scraping.py "#{params[:search_key]}"`
+      scraped_jumia = `python3 app/scrappers/main.py "#{params[:search_key]}"`
+      
       @jumia_products = JSON.parse(scraped_jumia)
   
       # render :text => @jumia_products.class
@@ -37,12 +38,13 @@ class Api::V1::ProductsController < ApplicationController
       # Create an array of Product objects from the parsed JSON data
       @jumia_products.each do |item|
         @new_jumia_product = Product.new(
-          name: item['name'],
+          name: item['header'],
           price: item['price'],
           link: item['link'],
-          rating: item['rating'],
-          reviews_count: item['reviews_count'],
-          img_url: item['img_url']
+          rating: item['rate'],
+          # score: item['score'],
+          reviews_count: item['reviewsCount'],
+          img_url: item['imgUrl']
         )
         @new_jumia_product.save!
       end

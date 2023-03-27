@@ -25,7 +25,7 @@ class Heuristic:
 
       if max_min_price_diff != 0:
         normalizedTotalPrice = (product.price - minTotalPrice)/(max_min_price_diff)
-      if max_min_price_diff != 0:
+      if max_min_rate_diff != 0:
         normalizedRate = (weights[round(product.rate-1)] * product.reviewsCount - minRateScore)/(max_min_rate_diff)
 
       product.setScore(normalizedRate - normalizedTotalPrice)
