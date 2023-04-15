@@ -1,4 +1,3 @@
-from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -7,16 +6,9 @@ from helpers import fetchElement, fetchElements, formatPrice, filterWithKeys, fo
 from product import Product
 from CssSelctors import selectors
 
-def scrap(search_keys):
-  options = Options()
-  options.headless = False
-  driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
-
-  
+def scrap(driver, search_keys):
   #spearate search keys with plus
-  search_keys = search_keys.replace(" ", "+")
-
-  driver.get('https://www.amazon.eg/s?k='+search_keys)
+  driver.get('https://www.amazon.eg/-/en/s?k='+ search_keys.replace(" ", "+"))
 
   search_results = fetchElements(driver, '[data-component-type="s-search-result"]')
   filtered_results = filterWithKeys(search_results, search_keys)
@@ -42,11 +34,11 @@ def scrap(search_keys):
     # Data
     if image_elem: imageUrl = image_elem.get_attribute('src')
     productPrice = formatPrice(product_price_elem.text)
-    rate = rate_elem.text
+    rate = rate_elem.get_attribute('aria-label').split(' ')[0]
     header = header_elem.text
     header = header.replace('"', '')
     link = fetchElement(header_elem, 'a').get_attribute('href')
-    reviewsCount = reviews_count_elem.text[1:-1]
+    reviewsCount = reviews_count_elem.text
 
     product = Product(float(productPrice[3:].replace(',', '')), float(rate), int(reviewsCount.replace(',', '')), imageUrl, header, 'amazon', link)
     products.append(product)

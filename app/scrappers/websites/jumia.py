@@ -1,20 +1,15 @@
-import sys
-# import time
-import json
-from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from product import Product
-
-# print(sys.path)
 
 product_containers = None
 
 def scrape_description(driver,descriptions):
     desc = driver.find_elements(By.CLASS_NAME, 'name')
     for d in desc:
-        descriptions.append(d.get_attribute('textContent'))
+      descriptions.append(d.get_attribute('textContent').replace('"', '').replace('\'', ''))
+
 
 
 def scrape_price(driver,prices):
@@ -52,22 +47,19 @@ def scrape_next(driver):
     next_pg.click()
 
 
-def scrap(search_key):
+def scrap(driver, search_key):
 
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option("detach", True)
-    s = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(options=options, service=s)
+    # options = webdriver.ChromeOptions()
+    # options.add_experimental_option("detach", True)
+    # s = Service(ChromeDriverManager().install())
+    # driver = webdriver.Chrome(options=options, service=s)
 
 
     jumia = 'https://www.jumia.com.eg/catalog/?q='
 
-    #add + to search key
-    search_key = '+'.join(sys.argv[1:])
-
     shipping = '&shipped_from=country_local#catalog-listing'
 
-    search_link = jumia + search_key + shipping
+    search_link = jumia + search_key.replace(" ", "+") + shipping
 
     driver.get(search_link)
 
@@ -109,10 +101,3 @@ def scrap(search_key):
     # print(json.dumps(products_json, indent=4))
 
     # driver.quit()
-
-
-
-if __name__ == '__main__':
-    #take everything after file name
-    # scrape(sys.argv[1:])
-    scrap(sys.argv[1:])

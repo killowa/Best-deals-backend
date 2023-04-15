@@ -23,12 +23,16 @@ class Api::V1::ProductsController < ApplicationController
       # Check if the search item is already in the database
       @search_keyword = SearchKeyword.find_by(search_key: params[:search_key])
       
-      if @search_keyword
-        return json_response({ error: "This item has already been searched" })
-      end
+      # if @search_keyword
+      #   return json_response({ error: "This item has already been searched" })
+      # end
   
       scraped_jumia = `python3 app/scrappers/main.py "#{params[:search_key]}"`
-      
+      # binding.pry
+      scraped_jumia = scraped_jumia.gsub(/'/, '"')
+      if scraped_jumia.empty?
+        return json_response({ message: "No results found" })
+      end
       @jumia_products = JSON.parse(scraped_jumia)
   
       # render :text => @jumia_products.class
@@ -37,6 +41,7 @@ class Api::V1::ProductsController < ApplicationController
 
       # Create an array of Product objects from the parsed JSON data
       @jumia_products.each do |item|
+        # binding.pry
         @new_jumia_product = Product.new(
           name: item['header'],
           price: item['price'],
