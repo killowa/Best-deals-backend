@@ -20,31 +20,24 @@ class Api::V1::ProductsController < ApplicationController
         return json_response({ error: "Please enter a search item" })
       end
   
-      # Check if the search item is already in the database
-      @search_keyword = SearchKeyword.find_by(search_key: params[:search_key])
-      
-      if @search_keyword
-        return json_response({ error: "This item has already been searched" })
-      end
+      # Create a new search item in searches table
+      @search_keyword = SearchKeyword.create(search_key: params[:search_key], website_name: "all")
+      @search_keyword.save!
   
-      scraped_jumia = `python3 app/scrappers/main.py "#{params[:search_key]}"`
+      scraped_products = `python3 app/scrappers/main.py "#{params[:search_key]}"`
       # binding.pry
 
       # replace single quotes with double quotes
-      scraped_jumia = scraped_jumia.gsub(/'/, '"')
-      if scraped_jumia.empty?
+      scraped_products = scraped_products.gsub(/'/, '"')
+      if scraped_products.empty?
         return json_response({ message: "No results found" })
       end
-      @jumia_products = JSON.parse(scraped_jumia)
-  
-      # render :text => @jumia_products.class
-
-
+      @scraped_products = JSON.parse(scraped_products)
 
       # Create an array of Product objects from the parsed JSON data
-      @jumia_products.each do |item|
+      @scraped_products.each do |item|
         # binding.pry
-        @new_jumia_product = Product.new(
+        @new_scraped_product = Product.new(
           name: item['header'],
           price: item['price'],
           link: item['link'],
@@ -52,48 +45,13 @@ class Api::V1::ProductsController < ApplicationController
           # score: item['score'],
           reviews_count: item['reviewsCount'],
           img_url: item['imageUrl'],
-          source: item['source'],
+          source: item['source']
         )
-        @new_jumia_product.save!
+        @new_scraped_product.save!
       end
 
-
-      # check if Porduct objects successfully created in database
-      if @new_jumia_product.save
-                # Create a new search item in searches table with source name
-        @search_keyword = SearchKeyword.create(search_key: params[:search_key], website_name: "all")
-      end
-
-      # # Process and store the products in the database
-      # @jumia_products.each do |jumia_product|
-      #   @new_jumia_product = Product.new(name: jumia_product["name"], price: jumia_product["price"], link: jumia_product["link"], img_url: jumia_product["img"])
-      #   @new_jumia_product.save
-      # end
   
-      # if @new_jumia_product.save
-      #   # Create a new search item in searches table
-      #   @search_keyword = SearchKeyword.create(search_key: params[:search_key], website_name: "Jumia")
-      # end
-  
-  
-    #   scraped_noon = `python3 app/scrapers/noon.py "#{params[:search_key]}"`
-    #   @noon_products = JSON.parse(scraped_noon)
-  
-    #   # render :text => @jumia_products.class
-  
-    #   # Process and store the products in the database
-    #   @noon_products.each do |noon_product|
-    #     @new_noon_product = Product.new(name: noon_product["name"], price: noon_product["price"], link: noon_product["link"], img_url: noon_product["img"])
-    #     @new_noon_product.save
-    #   end
-  
-    #   if @new_noon_product.save
-    #     # Create a new search item in searches table
-    #     @search_keyword = SearchKeyword.create(search_key: params[:search_key], website_name: "Noon")
-    #   end
-  
-  
-      json_response(@jumia_products)
+      json_response(@scraped_products)
     end
   
     # def update
