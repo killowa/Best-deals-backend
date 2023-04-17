@@ -23,12 +23,14 @@ class Api::V1::ProductsController < ApplicationController
       # Check if the search item is already in the database
       @search_keyword = SearchKeyword.find_by(search_key: params[:search_key])
       
-      # if @search_keyword
-      #   return json_response({ error: "This item has already been searched" })
-      # end
+      if @search_keyword
+        return json_response({ error: "This item has already been searched" })
+      end
   
       scraped_jumia = `python3 app/scrappers/main.py "#{params[:search_key]}"`
       # binding.pry
+
+      # replace single quotes with double quotes
       scraped_jumia = scraped_jumia.gsub(/'/, '"')
       if scraped_jumia.empty?
         return json_response({ message: "No results found" })
@@ -49,7 +51,8 @@ class Api::V1::ProductsController < ApplicationController
           rating: item['rate'],
           # score: item['score'],
           reviews_count: item['reviewsCount'],
-          img_url: item['imgUrl']
+          img_url: item['imageUrl'],
+          source: item['source'],
         )
         @new_jumia_product.save!
       end
@@ -57,8 +60,8 @@ class Api::V1::ProductsController < ApplicationController
 
       # check if Porduct objects successfully created in database
       if @new_jumia_product.save
-        # Create a new search item in searches table
-        @search_keyword = SearchKeyword.create(search_key: params[:search_key], website_name: "Jumia")
+                # Create a new search item in searches table with source name
+        @search_keyword = SearchKeyword.create(search_key: params[:search_key], website_name: "all")
       end
 
       # # Process and store the products in the database
