@@ -9,6 +9,7 @@ def scrape_description(driver,descriptions):
     desc = driver.find_elements(By.CLASS_NAME, 'name')
     for d in desc:
       descriptions.append(d.get_attribute('textContent').replace('"', '').replace('\'', ''))
+    return descriptions
 
 
 
@@ -18,6 +19,7 @@ def scrape_price(driver,prices):
         pr = p.get_attribute('textContent')
         pr = float(pr[4:].split('-')[0].replace(',', ''))
         prices.append(pr)
+    return prices
 
 
 def scrape_rating(driver,ratings):
@@ -28,19 +30,19 @@ def scrape_rating(driver,ratings):
         r = r_element.text.split() if r_element else None
         # ratings.append(r.get_attribute('textContent'))
         ratings[i] = r[0] if r else None
-
+    return ratings
 
 def scrape_img(driver,imgs):
     img = driver.find_elements(By.CLASS_NAME, 'img')
     for i in img:
         imgs.append(i.get_attribute('src'))
-
+    return imgs
 
 def scrape_link(driver,links):
     link = driver.find_elements(By.CLASS_NAME, 'core')
     for l in link:
         links.append(l.get_attribute('href'))
-
+    return links
 
 def scrape_next(driver):
     next_pg = driver.find_element(By.CSS_SELECTOR, '[aria-label="Close"]')
@@ -73,11 +75,11 @@ def scrap(driver, search_key):
     imgs = []
     links = []
 
-    scrape_description(driver,descriptions)
-    scrape_price(driver,prices)
+    descriptions = scrape_description(driver,descriptions)
+    prices = scrape_price(driver,prices)
     # scrape_rating(driver,ratings)
-    scrape_img(driver,imgs)
-    scrape_link(driver,links)
+    imgs = scrape_img(driver,imgs)
+    links = scrape_link(driver,links)
 
     # print(len(product_containers))
     # print()

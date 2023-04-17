@@ -17,10 +17,10 @@ WEBSITES_PATH = get_file_path('websites')
 scrappingFiles = ['websites.' + f.split('.')[0] for f in listdir(WEBSITES_PATH) if isfile(join(WEBSITES_PATH, f))]
 
 SEARCH_KEYS = ' '.join(sys.argv[1:])
-SEARCH_KEYS = "dell g15"
+# SEARCH_KEYS = "dell g15"
 options = Options()
-options.headless = False
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
+# options.add_argument('--headless=new') # use headless mode
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 
 products = []
