@@ -2,60 +2,10 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from product import Product
-
-product_containers = None
-
-def scrape_description(driver,descriptions):
-    desc = driver.find_elements(By.CLASS_NAME, 'name')
-    for d in desc:
-      descriptions.append(d.get_attribute('textContent').replace('"', '').replace('\'', ''))
-    return descriptions
-
-
-
-def scrape_price(driver,prices):
-    price = driver.find_elements(By.CLASS_NAME, 'prc')
-    for p in price:
-        pr = p.get_attribute('textContent')
-        pr = float(pr[4:].split('-')[0].replace(',', ''))
-        prices.append(pr)
-    return prices
-
-
-def scrape_rating(driver,ratings):
-    # rating = driver.find_elements(By.CLASS_NAME,'stars _s')
-    for i, c in enumerate(product_containers):
-        r_element = driver.find_elements(By.CLASS_NAME, 'stars _s')
-
-        r = r_element.text.split() if r_element else None
-        # ratings.append(r.get_attribute('textContent'))
-        ratings[i] = r[0] if r else None
-    return ratings
-
-def scrape_img(driver,imgs):
-    img = driver.find_elements(By.CLASS_NAME, 'img')
-    for i in img:
-        imgs.append(i.get_attribute('src'))
-    return imgs
-
-def scrape_link(driver,links):
-    link = driver.find_elements(By.CLASS_NAME, 'core')
-    for l in link:
-        links.append(l.get_attribute('href'))
-    return links
-
-def scrape_next(driver):
-    next_pg = driver.find_element(By.CSS_SELECTOR, '[aria-label="Close"]')
-    next_pg.click()
+from helpers import fetchElement, fetchElements
 
 
 def scrap(driver, search_key):
-
-    # options = webdriver.ChromeOptions()
-    # options.add_experimental_option("detach", True)
-    # s = Service(ChromeDriverManager().install())
-    # driver = webdriver.Chrome(options=options, service=s)
-
 
     jumia = 'https://www.jumia.com.eg/catalog/?q='
 
@@ -65,41 +15,41 @@ def scrap(driver, search_key):
 
     driver.get(search_link)
 
-    product_containers = driver.find_elements(
-        By.CSS_SELECTOR, ".prd._fb.col.c-prd")
+    product_containers = fetchElements(driver, '.prd._fb.col.c-prd')
 
-    descriptions = []
-    prices = []
+    headers = []*len(product_containers)
+    prices = []*len(product_containers)
     ratings = [0]*len(product_containers)
     reviews_count = [0]*len(product_containers)
-    imgs = []
-    links = []
+    imgs = []*len(product_containers)
+    links = []*len(product_containers)
 
-    descriptions = scrape_description(driver,descriptions)
-    prices = scrape_price(driver,prices)
-    # scrape_rating(driver,ratings)
-    imgs = scrape_img(driver,imgs)
-    links = scrape_link(driver,links)
+    for i,cont in enumerate(product_containers):
+        header = fetchElement(cont, f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a > div.info > h3')
+        headers.append(header.get_attribute('textContent').replace('"', '').replace('\'', '') if header else None)
+                
+        price = fetchElement(cont, f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a > div.info > div.prc')
+        pr = price.get_attribute('textContent') if price else None
+        pr = float(pr[4:].split('-')[0].replace(',', '')) if pr else None
+        prices.append(pr if pr else None)
 
-    # print(len(product_containers))
-    # print()
-    # print(len(descriptions), len(prices), len(ratings), len(imgs), len(links),len(reviews_count), len(imgs))
+        rate = fetchElement(cont, '.rev')
+        r = rate.get_attribute('innerHTML') if rate else None
+        #split rate into stars and reviews count
+        if r:
+            reviews_count[i] = r[-2]
+            ratings[i] = r.split('>')[1].split(' ')[0]
+        
+        img = fetchElement(cont, '.img')
+        img_link = img.get_attribute('src')
+        imgs.append(img_link if img_link[:4] != "data" else None)
+
+        link = fetchElement(cont, '.core')
+        links.append(link.get_attribute('href') if link else None)
+
 
     # create list of Product objects
-    products = [Product(prices[i], ratings[i], reviews_count[i], imgs[i], descriptions[i], "jumia", links[i]
-                        ) for i in range(len(descriptions))]
-    
+    products = [Product(prices[i], ratings[i], reviews_count[i], imgs[i], headers[i], "jumia", links[i]
+                        ) for i in range(len(headers))]
     
     return products
-
-    # products_json = []
-
-    # # print first product details
-    # for i in range(len(products)):
-        
-    #     products_json.append(json.loads(products[i].toJson()))
-
-    # # print poducts_json as a JSON string to be sent to the API endpoint
-    # print(json.dumps(products_json, indent=4))
-
-    # driver.quit()
