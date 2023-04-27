@@ -35,3 +35,6 @@ productsData = []
 for product in products: productsData.append(json.loads(product.toJson()))
 
 print(productsData)
+
+#quit driver
+driver.quit()

@@ -19,7 +19,7 @@ def scrap(driver, search_key):
 
     headers = []*len(product_containers)
     prices = []*len(product_containers)
-    ratings = [0]*len(product_containers)
+    ratings = [0.0]*len(product_containers)
     reviews_count = [0]*len(product_containers)
     imgs = []*len(product_containers)
     links = []*len(product_containers)
@@ -37,19 +37,19 @@ def scrap(driver, search_key):
         r = rate.get_attribute('innerHTML') if rate else None
         #split rate into stars and reviews count
         if r:
-            reviews_count[i] = r[-2]
-            ratings[i] = r.split('>')[1].split(' ')[0]
+            reviews_count[i] = int(r[-2])
+            ratings[i] = float(r.split('>')[1].split(' ')[0])
         
         img = fetchElement(cont, '.img')
         img_link = img.get_attribute('src')
-        imgs.append(img_link if img_link[:4] != "data" else None)
+        imgs.append(img_link if img_link[:4] != "data" else "")
 
         link = fetchElement(cont, '.core')
-        links.append(link.get_attribute('href') if link else None)
+        links.append(link.get_attribute('href') if link else "")
 
 
     # create list of Product objects
     products = [Product(prices[i], ratings[i], reviews_count[i], imgs[i], headers[i], "jumia", links[i]
-                        ) for i in range(len(headers))]
+                        ) for i in range(len(product_containers))]
     
     return products

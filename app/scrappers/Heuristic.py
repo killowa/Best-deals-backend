@@ -13,7 +13,7 @@ class Heuristic:
     minTotalPrice, maxTotalPrice = min(totalPrices), max(totalPrices)
 
     if len(self.products) == 0: #TODO: Normalize on all sites
-      product.setScore(ratesScore[0] - totalPrices[0])
+      # product.setScore(ratesScore[0] - totalPrices[0])
       return
 
     for product in self.products:
