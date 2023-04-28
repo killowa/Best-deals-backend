@@ -7,6 +7,22 @@ class Api::V1::ProductsController < ApplicationController
 
       @search = Product.ransack(params[:filter])
 
+      # Set the default sort to price ascending
+      params[:sort_column] ||= 'price'
+      params[:sort_order] ||= 'asc'
+
+      # Check if sort_column is valid
+      if !Product.column_names.include?(params[:sort_column])
+        return json_response({ error: "Invalid sort column" })
+      end
+
+      # Check if sort_order is valid
+      if params[:sort_order] != "asc" && params[:sort_order] != "desc"
+        return json_response({ error: "Invalid sort order" })
+      end
+
+      @search.sorts = ["#{params[:sort_column]} #{params[:sort_order]}"] if @search.sorts.empty?
+
       @products = @search.result.page(params[:page]).per(params[:per_page])
 
       json_response(@products)
