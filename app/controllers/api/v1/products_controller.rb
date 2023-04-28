@@ -2,9 +2,10 @@ class Api::V1::ProductsController < ApplicationController
 
     # GET all products
     def index
-      # @products = Product.all
-      # @products = { "products": "Dell G15 laptop"}
-      @products = Product.all
+
+      @q = Product.ransack(params[:q])
+      @products = @q.result().page(params[:page]).per(params[:per_page])
+
       json_response(@products)
     end
   
