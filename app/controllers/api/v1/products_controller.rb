@@ -1,10 +1,13 @@
 class Api::V1::ProductsController < ApplicationController
 
-    # GET all products
+    # filter, sort, paginate products (all optional)
     def index
 
-      @q = Product.ransack(params[:q])
-      @products = @q.result().page(params[:page]).per(params[:per_page])
+      #example: http://localhost/...filter[price_eq]=100&filter[rating_gteq]=4.8&sort_column=price&sort_order=asc&page=1&per_page=10
+
+      @search = Product.ransack(params[:filter])
+
+      @products = @search.result.page(params[:page]).per(params[:per_page])
 
       json_response(@products)
     end
