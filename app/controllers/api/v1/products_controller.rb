@@ -3,13 +3,16 @@ class Api::V1::ProductsController < ApplicationController
     # filter, sort, paginate products (all optional)
     def index
 
-      #example: http://localhost/...filter[price_eq]=100&filter[rating_gteq]=4.8&sort_column=price&sort_order=asc&page=1&per_page=10
+      #example: http://localhost/...products?filter[price_eq]=100&filter[rating_gteq]=4.8&sort_column=price&sort_order=asc&page=1&per_page=10
 
       @search = Product.ransack(params[:filter])
 
-      # Set the default sort to price ascending
-      params[:sort_column] ||= 'price'
-      params[:sort_order] ||= 'asc'
+      ## Default parameters
+      # params[:sort_column] ||= 'price'
+      params[:sort_order] ||= 'desc'
+      params[:sort_column] ||= 'score'
+      params[:page] ||= 1
+      params[:per_page] ||= 10
 
       # Check if sort_column is valid
       if !Product.column_names.include?(params[:sort_column])
@@ -64,10 +67,10 @@ class Api::V1::ProductsController < ApplicationController
             price: item['price'],
             link: item['link'],
             rating: item['rate'],
-            # score: item['score'],
             reviews_count: item['reviewsCount'],
             img_url: item['imageUrl'],
-            source: item['source']
+            source: item['source'],
+            score: item['score']
           )
           # @new_scraped_product.search_keyword = @search_keyword # associate the search keyword with each product
           
