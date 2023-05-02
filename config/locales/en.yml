@@ -33,3 +33,11 @@ en:
   hello: "Hello world"
   error:
     missing_param: "missing paramters"
+  
+  errors:
+    bad_request: "Bad request"
+    authorization: "Unauthorized"
+    authentication: "Unauthenticated"
+
+  messages:
+    success: 'Success'
