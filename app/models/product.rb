@@ -4,7 +4,7 @@ class Product < ApplicationRecord
 
     # define searchable attributes
     def self.ransackable_attributes(auth_object = nil)
-        %w[id name price link rating reviews_count img_url source created_at updated_at]
+        %w[id name price link rating reviews_count img_url source score created_at updated_at]
     end
 
     # def self.ransack_error
