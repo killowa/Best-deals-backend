@@ -37,5 +37,5 @@ def containsKeys(text, searchKeys):
 	return True
 
 def get_file_path(file_name):
-  root_dir = '/home/mazen/ssp/term 9/BestDeals/backend/app/scrappers/'
+  root_dir = 'app/scrappers/'
   return root_dir + file_name

@@ -12,5 +12,6 @@
             "console": "integratedTerminal",
             "justMyCode": true
         }
-    ]
+    ],
+    "args": ["--search", "dell g15"]
 }
