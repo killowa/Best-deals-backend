@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.0].define(version: 2023_04_30_214820) do
+=======
+ActiveRecord::Schema[7.0].define(version: 2023_05_02_180137) do
+>>>>>>> 6d71e53eb1fe04d385649174b2884d0c0dadc05d
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,8 +32,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_30_214820) do
     t.float "rating"
     t.integer "reviews_count"
     t.string "img_url"
+    t.string "source"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "score"
   end
 
   create_table "search_keywords", force: :cascade do |t|
