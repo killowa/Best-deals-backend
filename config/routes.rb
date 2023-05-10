@@ -24,6 +24,14 @@ Rails.application.routes.draw do
         end
       end
         end
+
+      resources :histories do
+          collection do
+          get 'histories', to: 'histories#index'
+          post 'create'
+          end
+        end
+    end
   end
 
   # resources :products

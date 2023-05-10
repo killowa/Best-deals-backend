@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :histories
+  has_many :products, through: :histories
   include TokenManager
   before_validation :downcase_email
 

@@ -1,4 +1,7 @@
 class Product < ApplicationRecord
+    has_many :histories
+    has_many :users, through: :histories
+    
     # belongs_to :website
     # after_create :create_search_keyword
 
