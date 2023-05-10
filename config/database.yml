@@ -84,5 +84,5 @@ test:
 production:
   <<: *default
   database: Best-deals-backend_production
-  username: Best-deals-backend
-  password: <%= ENV["best-deals_DATABASE_PASSWORD"] %>
+  username: postgres
+  password: <%= ENV['DB_PASSWORD'] %>

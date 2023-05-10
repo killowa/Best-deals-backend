@@ -49,9 +49,14 @@ class Api::V1::ProductsController < ApplicationController
         @search_keyword = SearchKeyword.create!(search_key: params[:search_key], website_name: "all")
         @search_keyword.save!
     
-        scraped_products = `python3 app/scrappers/main.py "#{params[:search_key]}"`
+        scraped_products = `python app/scrappers/main.py "#{params[:search_key]}"`
         # binding.pry
 
+        # check if the string is valid UTF-8, and if not, convert it to UTF-8.
+        if ! scraped_products.valid_encoding?
+          scraped_products = scraped_products.encode("UTF-16be", :invalid=>:replace, :replace=>"?").encode('UTF-8')
+        end
+        
         # replace single quotes with double quotes
         scraped_products = scraped_products.gsub(/'/, '"')
         if scraped_products.empty?

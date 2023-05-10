@@ -16,7 +16,14 @@ Rails.application.routes.draw do
       # post "scrape", to: "websites#scrape"
       get "searches", to: "search_keywords#index"
       get "websites", to: "websites#list_websites"
-    end
+      resources :favorites do
+        collection do
+          post 'create'
+          get "favorites",to:"favorites#index"
+          post 'destroy'
+        end
+      end
+        end
   end
 
   # resources :products
