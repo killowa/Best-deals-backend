@@ -16,6 +16,13 @@ Rails.application.routes.draw do
       # post "scrape", to: "websites#scrape"
       get "searches", to: "search_keywords#index"
       get "websites", to: "websites#list_websites"
+
+      resources :histories do
+          collection do
+          get 'histories', to: 'histories#index'
+          post 'create'
+          end
+        end
     end
   end
 

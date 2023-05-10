@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :histories
+  has_many :products, through: :histories
   include TokenManager
   before_validation :downcase_email
 
@@ -16,7 +18,8 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 8, maximum: 50 }
 
   validates :password, format: { with: PASSWORD_REGEX }
-
+  
+  
   private
 
   def downcase_email
