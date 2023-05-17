@@ -1,8 +1,4 @@
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.keys import Keys
-from helpers import fetchElement, fetchElements, formatPrice, filterWithKeys, formatDeliveryPrice
+from helpers import fetchElement, fetchElements, formatPrice, filterWithKeys
 from product import Product
 from CssSelctors import selectors
 
