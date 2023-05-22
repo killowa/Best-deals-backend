@@ -23,7 +23,7 @@ Rails.application.routes.draw do
           post 'destroy'
         end
       end
-        end
+        
 
       resources :histories do
           collection do
@@ -31,10 +31,7 @@ Rails.application.routes.draw do
           post 'create'
           end
         end
-    end
+      end
   end
-
-  # resources :products
-
 
 end

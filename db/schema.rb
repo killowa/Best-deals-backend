@@ -15,17 +15,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_133020) do
   enable_extension "plpgsql"
 
   create_table "favorites", force: :cascade do |t|
-ActiveRecord::Schema[7.0].define(version: 2023_05_09_124819) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "histories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "product_id"
     t.index ["product_id"], name: "index_favorites_on_product_id"
     t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
+  create_table "histories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "product_id"
     t.index ["product_id"], name: "index_histories_on_product_id"
     t.index ["user_id"], name: "index_histories_on_user_id"
   end
@@ -65,11 +67,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_124819) do
     t.datetime "updated_at", null: false
   end
 
-<<<<<<< HEAD
   add_foreign_key "favorites", "products"
   add_foreign_key "favorites", "users"
-=======
   add_foreign_key "histories", "products"
   add_foreign_key "histories", "users"
->>>>>>> 28c97cc3b5371ee299a41974e68f0caf884640fa
 end

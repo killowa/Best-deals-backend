@@ -1,5 +1,5 @@
 class Api::V1::FavoritesController < ApplicationController
-    before_action :authenticate_request
+     before_action :authenticate_request
 
     def index
       @favorites = current_user.favorites
@@ -20,7 +20,7 @@ class Api::V1::FavoritesController < ApplicationController
     end
 
     def destroy
-      @favorite = current_user.favorites.find(params[:id])
+      @favorite = current_user.favorites.find_by(product_id: params[:product_id])
       @favorite.destroy
       @favorites = current_user.favorites
       render json: @favorites
