@@ -81,7 +81,7 @@ class Api::V1::ProductsController < ApplicationController
       # redirect_to @scraped_products
 
       Product.update_products_without_img_url
-      @scraped_products = Product.all
+
       json_response(@scraped_products)
     end
   
