@@ -2,11 +2,14 @@ from helpers import fetchElement, fetchElements, formatPrice, filterWithKeys
 from product import Product
 from CssSelctors import selectors
 
-def scrap(driver, search_keys):
+def scrap(driver, search_keys, n):
   #spearate search keys with plus
   driver.get('https://www.amazon.eg/-/en/s?k='+ search_keys.replace(" ", "+"))
 
   search_results = fetchElements(driver, '[data-component-type="s-search-result"]')
+  # slice the first n results
+  search_results = search_results[:n]
+
   filtered_results = filterWithKeys(search_results, search_keys)
 
   products = []
