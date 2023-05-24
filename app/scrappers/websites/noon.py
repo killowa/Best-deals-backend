@@ -1,15 +1,16 @@
 from product import Product
 from helpers import fetchElement, fetchElements
 
-
-
-def scrap(driver, search_key="dell g15"):
+def scrap(driver, search_key, n):
 
     search_key = search_key.replace(' ', '%20')
     driver.get('https://www.noon.com/egypt-en/search/?q=' + search_key)
 
     
-    product_containers = fetchElements(driver, "#__next > div > section > div > div > div > div.sc-7f3b85c6-5.cqhwyd > div.sc-7f3b85c6-7.fTRNhd.grid > span")
+    product_containers = fetchElements(driver, "span[class='sc-5e739f1b-0 gEERDr wrapper productContainer  ']")
+
+    # slice the first n products
+    product_containers = product_containers[:n]
 
     names = []
     prices = [0.0]*len(product_containers)

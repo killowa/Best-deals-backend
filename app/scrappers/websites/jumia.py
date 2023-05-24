@@ -2,7 +2,7 @@ from product import Product
 from helpers import fetchElement, fetchElements
 
 
-def scrap(driver, search_key):
+def scrap(driver, search_key, n):
 
     jumia = 'https://www.jumia.com.eg/catalog/?q='
 
@@ -14,12 +14,15 @@ def scrap(driver, search_key):
 
     product_containers = fetchElements(driver, '.prd._fb.col.c-prd')
 
-    headers = []*len(product_containers)
-    prices = []*len(product_containers)
+    # slice the first n products
+    product_containers = product_containers[:n]
+
+    headers = []
+    prices = []
     ratings = [0.0]*len(product_containers)
     reviews_count = [0]*len(product_containers)
-    imgs = []*len(product_containers)
-    links = []*len(product_containers)
+    imgs = []
+    links = []
 
     for i,cont in enumerate(product_containers):
         header = fetchElement(cont, f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a > div.info > h3')
