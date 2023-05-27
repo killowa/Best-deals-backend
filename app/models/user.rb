@@ -19,7 +19,8 @@ class User < ApplicationRecord
 
   validates :password, format: { with: PASSWORD_REGEX }
   
-  
+  has_many :favorites
+  has_many :products, through: :favorites
   private
 
   def downcase_email

@@ -21,7 +21,8 @@ class Product < ApplicationRecord
     def self.ransackable_attributes(auth_object = nil)
         %w[id name price link rating reviews_count img_url source score created_at updated_at]
     end
-
+    has_many :wish_lists
+    has_many :users, through: :wish_lists
     # def self.ransack_error
     #     if params[:q].present?
     #       disallowed_attributes = params[:q].keys - self.ransackable_attributes
