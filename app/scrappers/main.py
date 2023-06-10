@@ -29,7 +29,7 @@ products = []
 
 # n is the maximum number of products to scrape from each website
 for scrappingFile in scrappingFiles:
-    products += __import__(scrappingFile,fromlist=['scrap']).scrap(driver, SEARCH_KEYS, n=25)
+    products += __import__(scrappingFile,fromlist=['scrap']).scrap(driver, SEARCH_KEYS, n=10)
 
 # print('len is = ',len(products))
 heuristic = Heuristic(products)

@@ -34,6 +34,10 @@ def scrap(driver, search_key, n):
         if rate != 0:
             numOfRates = fetchElement(p,"span[class='sc-61515602-2 cmvYOR']")
             numOfRates = numOfRates.text if numOfRates else 0
+            #replace 7.0K with 7000
+            if numOfRates[-1] == 'K':
+                numOfRates = float(numOfRates[:-1]) * 1000
+
             rates[i]=float(rate)
             reviews_count[i]=int(numOfRates)
         
