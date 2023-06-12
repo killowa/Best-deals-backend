@@ -21,6 +21,8 @@ class User < ApplicationRecord
   
   has_many :favorites
   has_many :products, through: :favorites
+
+  has_many :ratings
   private
 
   def downcase_email
