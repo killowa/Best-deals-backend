@@ -23,7 +23,12 @@ Rails.application.routes.draw do
           post 'destroy'
         end
       end
-        
+       
+      resources :ratings do
+        collection do
+          post 'create'
+        end
+      end
 
       resources :histories do
           collection do
