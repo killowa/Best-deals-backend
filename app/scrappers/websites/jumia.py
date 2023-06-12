@@ -12,8 +12,10 @@ def scrap(driver, search_key, n):
     search_link = jumia + search_key.replace(" ", "+") + shipping
 
     driver.get(search_link)
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-    product_containers = fetchElements(driver, '.prd._fb.col.c-prd')
+    product_containers = soup.select('.prd._fb.col.c-prd')
+    # product_containers = fetchElements(driver, '.prd._fb.col.c-prd')
 
     # slice the first n products
     product_containers = product_containers[:n]
@@ -26,7 +28,6 @@ def scrap(driver, search_key, n):
     links = []
 
     # get whole html then parse it
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     for i in range(len(product_containers)):
         
@@ -62,7 +63,8 @@ def scrap(driver, search_key, n):
         # parse needed link from html
         link = soup.select_one(
             f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a')
-        links.append(link['href'] if link else "")
+        full_link = "https://www.jumia.com.eg" + link['href'] if link else ""
+        links.append(full_link if link else "")
 
 
     # create list of Product objects
