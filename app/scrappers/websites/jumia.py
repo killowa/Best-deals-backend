@@ -1,5 +1,4 @@
 from product import Product
-from helpers import fetchElement, fetchElements
 from bs4 import BeautifulSoup
 
 

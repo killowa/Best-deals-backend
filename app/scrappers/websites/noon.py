@@ -7,6 +7,8 @@ def scrap(driver, search_key, n):
 
     search_key = search_key.replace(' ', '%20')
     driver.get('https://www.noon.com/egypt-en/search/?q=' + search_key)
+    # get whole html then parse it
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     product_containers = fetchElements(
         driver, "span[class='sc-5e739f1b-0 gEERDr wrapper productContainer  ']")
@@ -20,8 +22,6 @@ def scrap(driver, search_key, n):
     rates = [0.0]*len(product_containers)
     reviews_count = [0]*len(product_containers)
 
-    # get whole html then parse it
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     for i, cont in enumerate(product_containers):
 
