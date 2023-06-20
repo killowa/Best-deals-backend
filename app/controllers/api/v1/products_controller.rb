@@ -85,6 +85,8 @@ class Api::V1::ProductsController < ApplicationController
         @search_keyword = SearchKeyword.create!(search_key: params[:search_key], website_name: "all")
         @search_keyword.save!
     end
+      Product.update_products_without_img_url
+
       json_response(@scraped_products)
     end
   
