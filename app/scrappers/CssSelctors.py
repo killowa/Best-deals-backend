@@ -1,3 +1,5 @@
+# Amazon selectors
+
 selectors = {
 	'IMAGE': '.s-image',
 	'PRODUCT_PRICE': '.a-price [aria-hidden="true"]',

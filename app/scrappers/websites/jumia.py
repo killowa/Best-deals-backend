@@ -1,5 +1,5 @@
 from product import Product
-from helpers import fetchElement, fetchElements
+from bs4 import BeautifulSoup
 
 
 def scrap(driver, search_key, n):
@@ -11,8 +11,10 @@ def scrap(driver, search_key, n):
     search_link = jumia + search_key.replace(" ", "+") + shipping
 
     driver.get(search_link)
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-    product_containers = fetchElements(driver, '.prd._fb.col.c-prd')
+    product_containers = soup.select('.prd._fb.col.c-prd')
+    # product_containers = fetchElements(driver, '.prd._fb.col.c-prd')
 
     # slice the first n products
     product_containers = product_containers[:n]
@@ -24,28 +26,44 @@ def scrap(driver, search_key, n):
     imgs = []
     links = []
 
-    for i,cont in enumerate(product_containers):
-        header = fetchElement(cont, f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a > div.info > h3')
-        headers.append(header.get_attribute('textContent').replace('"', '').replace('\'', '') if header else None)
-                
-        price = fetchElement(cont, f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a > div.info > div.prc')
-        pr = price.get_attribute('textContent') if price else None
+    # get whole html then parse it
+
+    for i in range(len(product_containers)):
+        
+        # soup = BeautifulSoup(cont.get_attribute('innerHTML'), 'html.parser')
+        # parse needed header from html
+        header = soup.select_one(
+            f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a > div.info > h3')
+        headers.append(header.text.replace(
+            '"', '').replace('\'', '') if header else None)
+
+        # parse needed price from html
+        price = soup.select_one(
+            f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a > div.info > div.prc')
+        pr = price.text if price else None
         pr = float(pr[4:].split('-')[0].replace(',', '')) if pr else None
         prices.append(pr if pr else None)
 
-        rate = fetchElement(cont, '.rev')
-        r = rate.get_attribute('innerHTML') if rate else None
-        #split rate into stars and reviews count
+        # parse needed rate from html
+        rate = soup.select_one(
+            f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a > div.info > div.rev > div')
+        r = rate.text if rate else None
+        # split rate into stars and reviews count
         if r:
-            reviews_count[i] = int(r[-2])
-            ratings[i] = float(r.split('>')[1].split(' ')[0])
-        
-        img = fetchElement(cont, '.img')
-        img_link = img.get_attribute('src')
+            reviews_count[i] = int(rate.next_sibling.text.replace('(', '').replace(')', ''))
+            ratings[i] = float(r.split(' ')[0])
+
+        # parse needed image from html
+        img = soup.select_one(
+            f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a > div.img-c > img')
+        img_link = img['data-src']
         imgs.append(img_link if img_link[:4] != "data" else "")
 
-        link = fetchElement(cont, '.core')
-        links.append(link.get_attribute('href') if link else "")
+        # parse needed link from html
+        link = soup.select_one(
+            f'#jm > main > div.aim.row.-pbm > div.-pvs.col12 > section > div > article:nth-child({i+1}) > a')
+        full_link = "https://www.jumia.com.eg" + link['href'] if link else ""
+        links.append(full_link if link else "")
 
 
     # create list of Product objects
