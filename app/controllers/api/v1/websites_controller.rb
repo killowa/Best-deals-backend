@@ -1,7 +1,7 @@
 class Api::V1::WebsitesController < ApplicationController
   
     # GET all websites we are scraping
-    def list_websites
+    def index
       @websites = Website.all
       json_response(@websites)
     end
