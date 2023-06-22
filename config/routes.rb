@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       resources :ratings do
         collection do
           post 'create'
+          get 'ratings', to: 'ratings#index'
         end
       end
 

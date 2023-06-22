@@ -70,7 +70,8 @@ class Api::V1::ProductsController < ApplicationController
             reviews_count: item['reviewsCount'],
             img_url: item['imageUrl'],
             source: item['source'],
-            score: item['score']
+            score: item['score'],
+            search_keyword_id: @search_keyword.id
           )
           # @new_scraped_product.search_keyword = @search_keyword # associate the search keyword with each product
           
@@ -80,8 +81,7 @@ class Api::V1::ProductsController < ApplicationController
       # @scraped_products.save_with_keyword(params[:search_key],"all") # Call the model method with the search keyword
       # redirect_to @scraped_products
 
-      Product.update_products_without_img_url
-
+      Product.update_products_without_img_url(@search_keyword.id)
       json_response(@scraped_products)
     end
   
