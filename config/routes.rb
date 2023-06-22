@@ -6,14 +6,15 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :products
+      resources :products, :histories, :favorites
+      resources :websites, only: :index
       resources :users, only: :create do
         collection do
           post 'login'
           post 'logout'
         end
       end
-      # post "scrape", to: "websites#scrape"
+
       get "searches", to: "search_keywords#index"
       get "websites", to: "websites#list_websites"
       resources :favorites do
@@ -23,7 +24,13 @@ Rails.application.routes.draw do
           post 'destroy'
         end
       end
-        
+       
+      resources :ratings do
+        collection do
+          post 'create'
+          get 'ratings', to: 'ratings#index'
+        end
+      end
 
       resources :histories do
           collection do

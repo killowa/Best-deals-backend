@@ -42,15 +42,22 @@ class Api::V1::ProductsController < ApplicationController
       if !params[:search_key]&.present?
         return json_response({ error: "Please enter a search item" })
       end
-  
+
+      # if search item already exists, must redirect to the index method
+      if SearchKeyword.exists?(search_key: params[:search_key])
+        
+        # add ?filter[name_i_cont]=#{params[:search_key]} to the url
+        @search = Product.ransack({ name_i_cont: params[:search_key] })
+        # sort by score desc
+        @search.sorts = ["score desc"]
+        @products = @search.result.page(1).per(10)
+
+        return json_response(@products)
+      end
+
       ActiveRecord::Base.transaction do
 
-        # Create a new search item in searches table
-        @search_keyword = SearchKeyword.create!(search_key: params[:search_key], website_name: "all")
-        @search_keyword.save!
-    
         scraped_products = `python3 app/scrappers/main.py "#{params[:search_key]}"`
-        # binding.pry
 
         # replace single quotes with double quotes
         scraped_products = scraped_products.gsub(/'/, '"')
@@ -59,9 +66,12 @@ class Api::V1::ProductsController < ApplicationController
         end
         @scraped_products = JSON.parse(scraped_products)
 
+        # Create a new search item in searches table
+        @search_keyword = SearchKeyword.create!(search_key: params[:search_key], website_name: "all")
+        @search_keyword.save!
+
         # Create an array of Product objects from the parsed JSON data
         @scraped_products.each do |item|
-          # binding.pry
           @new_scraped_product = Product.new(
             name: item['header'],
             price: item['price'],
@@ -70,17 +80,14 @@ class Api::V1::ProductsController < ApplicationController
             reviews_count: item['reviewsCount'],
             img_url: item['imageUrl'],
             source: item['source'],
-            score: item['score']
+            score: item['score'],
+            search_keyword_id: @search_keyword.id
           )
-          # @new_scraped_product.search_keyword = @search_keyword # associate the search keyword with each product
-          
           @new_scraped_product.save!
         end
+     
     end
-      # @scraped_products.save_with_keyword(params[:search_key],"all") # Call the model method with the search keyword
-      # redirect_to @scraped_products
-
-      Product.update_products_without_img_url
+    Product.update_products_without_img_url(@search_keyword.id)
 
       json_response(@scraped_products)
     end

@@ -1,19 +1,18 @@
 class Product < ApplicationRecord
     has_many :histories
     has_many :users, through: :histories
-    
+    belongs_to :search_keyword
+
     def self.products_without_img_url
-        where(img_url: "")
+      where(img_url: "")
+    end
+    def self.update_products_without_img_url(search_keyword_id)
+      products_with_img_url = where.not(img_url: "").where(search_keyword_id: search_keyword_id)
+      products_without_img_url.where(search_keyword_id: search_keyword_id).each_with_index do |product, index|
+        product.update(img_url: products_with_img_url[index % products_with_img_url.size].img_url)
       end
-    def self.product_with_img_url
-        where.not(img_url: "").first
     end
-    def self.update_products_without_img_url
-        product_with_img_url = product_with_img_url()
-        products_without_img_url.each do |product|
-          product.update(img_url: product_with_img_url.img_url)
-        end
-    end
+
     # belongs_to :website
     # after_create :create_search_keyword
 
