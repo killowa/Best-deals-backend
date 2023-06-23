@@ -83,6 +83,4 @@ test:
 #
 production:
   <<: *default
-  database: Best-deals-backend_production
-  username: Best-deals-backend
-  password: <%= ENV["best-deals_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
