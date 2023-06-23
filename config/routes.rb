@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :products, :histories, :favorites
+      resources :products, :histories, :favorites, :ratings
       resources :websites, only: :index
       resources :users, only: :create do
         collection do
@@ -16,28 +16,7 @@ Rails.application.routes.draw do
       end
 
       get "searches", to: "search_keywords#index"
-      get "websites", to: "websites#list_websites"
-      resources :favorites do
-        collection do
-          post 'create'
-          get "favorites",to:"favorites#index"
-          post 'destroy'
-        end
-      end
-       
-      resources :ratings do
-        collection do
-          post 'create'
-          get 'ratings', to: 'ratings#index'
-        end
-      end
 
-      resources :histories do
-          collection do
-          get 'histories', to: 'histories#index'
-          post 'create'
-          end
-        end
       end
   end
 
