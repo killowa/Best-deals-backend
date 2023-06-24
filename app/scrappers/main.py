@@ -19,8 +19,8 @@ scrappingFiles = ['websites.' + f.split('.')[0] for f in listdir(
 
 SEARCH_KEYS = ' '.join(sys.argv[1:])
 # SEARCH_KEYS = "dell g15"
-options = Options()
-# options.add_argument('--headless=new') # use headless mode
+options = webdriver.ChromeOptions()
+options.add_argument('--headless=new') # use headless mode
 driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
 
