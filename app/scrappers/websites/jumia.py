@@ -1,6 +1,5 @@
 from product import Product
 from bs4 import BeautifulSoup
-import requests as req
 
 
 def scrap(driver, search_key, num_of_products):
@@ -11,11 +10,8 @@ def scrap(driver, search_key, num_of_products):
 
     search_link = jumia + search_key.replace(" ", "+") + shipping
 
-    # driver.get(search_link)
-
-    with req.get(search_link,timeout=5) as response:
-        html = response.content
-        soup = BeautifulSoup(html, 'html.parser')
+    driver.get(search_link)
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     product_containers = soup.select('.prd._fb.col.c-prd')
     # product_containers = fetchElements(driver, '.prd._fb.col.c-prd')

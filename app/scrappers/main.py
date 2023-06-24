@@ -5,7 +5,6 @@ from os.path import isfile, join
 from helpers import get_file_path
 from Heuristic import Heuristic
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
