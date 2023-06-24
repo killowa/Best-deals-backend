@@ -2,7 +2,7 @@ from product import Product
 from bs4 import BeautifulSoup
 
 
-def scrap(driver, search_key, n):
+def scrap(driver, search_key, num_of_products):
 
     jumia = 'https://www.jumia.com.eg/catalog/?q='
 
@@ -17,7 +17,7 @@ def scrap(driver, search_key, n):
     # product_containers = fetchElements(driver, '.prd._fb.col.c-prd')
 
     # slice the first n products
-    product_containers = product_containers[:n]
+    product_containers = product_containers[:num_of_products]
 
     headers = []
     prices = []
