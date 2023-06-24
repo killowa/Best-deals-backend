@@ -1,45 +1,55 @@
-from helpers import fetchElement, fetchElements, formatPrice, filterWithKeys
+from helpers import formatPrice, filterWithKeys
 from product import Product
 from CssSelctors import selectors
+from bs4 import BeautifulSoup
 
-def scrap(driver, search_keys, n):
-  #spearate search keys with plus
-  driver.get('https://www.amazon.eg/-/en/s?k='+ search_keys.replace(" ", "+"))
 
-  search_results = fetchElements(driver, '[data-component-type="s-search-result"]')
-  # slice the first n results
-  search_results = search_results[:n]
+def scrap(driver, search_keys, num_of_products):
+    # spearate search keys with plus
+    driver.get('https://www.amazon.eg/-/en/s?k=' +
+               search_keys.replace(" ", "+"))
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-  filtered_results = filterWithKeys(search_results, search_keys)
+    search_results = soup.select('[data-component-type="s-search-result"]')
+    # search_results = result.select_ones '[data-component-type="s-search-result"]')
+    # slice the first n results
+    search_results = search_results[:num_of_products]
 
-  products = []
+    filtered_results = filterWithKeys(search_results, search_keys)
 
-  for result in filtered_results:
+    products = []
 
-    # Default values for none mandatory elems
-    imageUrl = ""
+    for result in filtered_results:
 
-    # Selenium elements for required product data
-    product_price_elem = fetchElement(result, selectors['PRODUCT_PRICE'])
-    header_elem = fetchElement(result, selectors['HEADER'])
-    rate_elem = fetchElement(result, selectors['RATE'])
-    reviews_count_elem = fetchElement(result, selectors['REVIEWS_COUNT'])
-    image_elem = fetchElement(result, selectors['IMAGE'])
+        # Default values for none mandatory elems
+        imageUrl = ""
 
-    mandatory_elems = [product_price_elem, rate_elem, reviews_count_elem, header_elem]
+        # Selenium elements for required product data
+        product_price_elem = result.select_one(selectors['PRODUCT_PRICE'])
+        header_elem = result.select_one(selectors['HEADER'])
+        rate_elem = result.select_one(selectors['RATE'])
+        reviews_count_elem = result.select_one(selectors['REVIEWS_COUNT'])
+        image_elem = result.select_one(selectors['IMAGE'])
 
-    if None in mandatory_elems: continue
+        mandatory_elems = [product_price_elem,
+                           rate_elem, reviews_count_elem, header_elem]
 
-    # Data
-    if image_elem: imageUrl = image_elem.get_attribute('src')
-    productPrice = formatPrice(product_price_elem.text)
-    rate = rate_elem.get_attribute('aria-label').split(' ')[0]
-    header = header_elem.text
-    header = header.replace('"', '')
-    link = fetchElement(header_elem, 'a').get_attribute('href')
-    reviewsCount = reviews_count_elem.text
+        if None in mandatory_elems:
+            continue
 
-    product = Product(float(productPrice[3:].replace(',', '')), float(rate), int(reviewsCount.replace(',', '')), imageUrl, header, 'amazon', link)
-    products.append(product)
+        # Data
+        if image_elem:
+            imageUrl = image_elem.get('src')
+        productPrice = formatPrice(product_price_elem.text)
+        rate = rate_elem.get('aria-label').split(' ')[0]
+        header = header_elem.text
+        header = header.replace('"', '')
+        link = header_elem.select_one('a').get('href')
+        link = 'https://www.amazon.eg' + link
+        reviewsCount = reviews_count_elem.text
 
-  return products
+        product = Product(float(productPrice[3:].replace(',', '')), float(rate), int(
+            reviewsCount.replace(',', '')), imageUrl, header, 'amazon', link)
+        products.append(product)
+
+    return products
