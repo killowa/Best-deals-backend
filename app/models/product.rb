@@ -9,7 +9,16 @@ class Product < ApplicationRecord
     def self.update_products_without_img_url(search_keyword_id)
       products_with_img_url = where.not(img_url: "").where(search_keyword_id: search_keyword_id)
       products_without_img_url.where(search_keyword_id: search_keyword_id).each_with_index do |product, index|
-        product.update(img_url: products_with_img_url[index % products_with_img_url.size].img_url)
+        #handle case when products_with_img_url is empty => division by zero!
+        if products_with_img_url.size == 0
+          product.update(img_url: "https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg")
+        else
+          product.update(img_url: products_with_img_url[index % products_with_img_url.size].img_url)
+        end
+
+        
+        # product.update(img_url: products_with_img_url[index % products_with_img_url.size].img_url)
+
       end
     end
 
