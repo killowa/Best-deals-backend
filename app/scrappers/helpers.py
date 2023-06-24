@@ -21,7 +21,7 @@ def formatPrice(price):
 	return '.'.join(price.splitlines())
 
 def filterWithKeys(search_results, keys):
-  return [res for res in search_results if containsKeys(fetchElement(res, selectors['HEADER']).text, keys)]
+  return [res for res in search_results if containsKeys(res.select_one(selectors['HEADER']).text, keys)]
 
 def formatDeliveryPrice(deliveryPrice):
 
