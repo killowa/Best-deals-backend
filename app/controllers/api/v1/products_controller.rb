@@ -57,9 +57,12 @@ class Api::V1::ProductsController < ApplicationController
 
       ActiveRecord::Base.transaction do
 
-        scraped_products = `python3 app/scrappers/main.py "#{params[:search_key]}"`
+        scraped_products = `python app/scrappers/main.py "#{params[:search_key]}"`
 
         # replace single quotes with double quotes
+        if ! scraped_products.valid_encoding?
+          scraped_products = scraped_products.encode("UTF-16be", :invalid=>:replace, :replace=>"?").encode('UTF-8')
+        end
         scraped_products = scraped_products.gsub(/'/, '"')
         if scraped_products.empty?
           return json_response({ message: "No results found" })
