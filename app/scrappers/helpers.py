@@ -20,8 +20,8 @@ def fetchElements(root, cssSelector):
 def formatPrice(price):
 	return '.'.join(price.splitlines())
 
-def filterWithKeys(search_results, keys):
-  return [res for res in search_results if containsKeys(res.select_one(selectors['HEADER']).text, keys)]
+def filterWithKeys(search_results, keys, header_selector):
+  return [res for res in search_results if containsKeys(res.select_one(header_selector).text, keys)]
 
 def formatDeliveryPrice(deliveryPrice):
 
