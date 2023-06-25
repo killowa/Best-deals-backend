@@ -23,7 +23,6 @@ options.add_argument('--headless=new') # use headless mode
 driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
 
-
 products = []
 
 # n is the maximum number of products to scrape from each website
