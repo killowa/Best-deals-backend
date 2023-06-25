@@ -2,25 +2,10 @@ class Product < ApplicationRecord
     has_many :histories
     has_many :users, through: :histories
     belongs_to :search_keyword
-
-    def self.products_without_img_url
-      where(img_url: "")
-    end
-    def self.update_products_without_img_url(search_keyword_id)
-      products_with_img_url = where.not(img_url: "").where(search_keyword_id: search_keyword_id)
-      products_without_img_url.where(search_keyword_id: search_keyword_id).each_with_index do |product, index|
-        #handle case when products_with_img_url is empty => division by zero!
-        if products_with_img_url.size == 0
-          product.update(img_url: "https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg")
-        else
-          product.update(img_url: products_with_img_url[index % products_with_img_url.size].img_url)
-        end
-
-        
-        # product.update(img_url: products_with_img_url[index % products_with_img_url.size].img_url)
-
-      end
-    end
+  
+    validates :price, :link, :img_url, :score, :name, :rating, :reviews_count, presence: true
+    validates :rating, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
+    validates :score, numericality: { greater_than_or_equal_to: -1, less_than_or_equal_to: 1 }
 
     # belongs_to :website
     # after_create :create_search_keyword

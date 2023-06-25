@@ -1,11 +1,11 @@
 from product import Product
 from bs4 import BeautifulSoup
+from helpers import filterWithKeys
 
 
 def scrap(driver, search_key, num_of_products):
 
-    search_key = search_key.replace(' ', '%20')
-    driver.get('https://www.noon.com/egypt-en/search/?q=' + search_key)
+    driver.get('https://www.noon.com/egypt-en/search/?q=' + search_key.replace(' ', '%20'))
     # get whole html then parse it
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
@@ -17,6 +17,7 @@ def scrap(driver, search_key, num_of_products):
 
     # slice the first n products
     product_containers = product_containers[:num_of_products]
+    product_containers = filterWithKeys(product_containers, search_key, 'div[data-qa="product-name"]')
 
     names = []
     prices = [0.0]*len(product_containers)
