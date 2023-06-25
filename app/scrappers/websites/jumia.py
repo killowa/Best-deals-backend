@@ -1,5 +1,6 @@
 from product import Product
 from bs4 import BeautifulSoup
+from helpers import filterWithKeys
 
 
 def scrap(driver, search_key, num_of_products):
@@ -14,10 +15,11 @@ def scrap(driver, search_key, num_of_products):
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     product_containers = soup.select('.prd._fb.col.c-prd')
-    # product_containers = fetchElements(driver, '.prd._fb.col.c-prd')
-
     # slice the first n products
     product_containers = product_containers[:num_of_products]
+
+    product_containers = filterWithKeys(product_containers, search_key, 'h3.name')
+    
 
     headers = []
     prices = []
