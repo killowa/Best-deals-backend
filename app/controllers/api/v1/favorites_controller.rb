@@ -7,9 +7,9 @@ class Api::V1::FavoritesController < ApplicationController
     end
 
     def create
-        if !params[:product_id]&.present?
-            return json_response({ error: "Please enter a product id" })
-          end
+      if !params[:product_id]&.present?
+          return json_response({ error: "Please enter a product id" })
+      end
       @favorite = current_user.favorites.new(product_id: params[:product_id])
 
       if @favorite.save
@@ -30,7 +30,5 @@ class Api::V1::FavoritesController < ApplicationController
       render json: @favorites
       
     end
-
-    private
 
 end
