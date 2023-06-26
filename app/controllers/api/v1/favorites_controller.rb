@@ -7,9 +7,9 @@ class Api::V1::FavoritesController < ApplicationController
     end
 
     def create
-        if !params[:product_id]&.present?
-            return json_response({ error: "Please enter a product id" })
-          end
+      if !params[:product_id]&.present?
+          return json_response({ error: "Please enter a product id" })
+      end
       @favorite = current_user.favorites.new(product_id: params[:product_id])
 
       if @favorite.save
@@ -21,12 +21,14 @@ class Api::V1::FavoritesController < ApplicationController
 
     def destroy
       @favorite = current_user.favorites.find_by(product_id: params[:product_id])
+      # check if the favorite exists
+      if @favorite.nil?
+        return json_response({ error: "Favorite not found" }, :not_found)
+      end
       @favorite.destroy
       @favorites = current_user.favorites
       render json: @favorites
       
     end
-
-    private
 
 end

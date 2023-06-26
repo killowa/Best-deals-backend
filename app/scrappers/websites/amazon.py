@@ -15,7 +15,7 @@ def scrap(driver, search_keys, num_of_products):
     # slice the first n results
     search_results = search_results[:num_of_products]
 
-    filtered_results = filterWithKeys(search_results, search_keys)
+    filtered_results = filterWithKeys(search_results, search_keys, selectors['HEADER'])
 
     products = []
 

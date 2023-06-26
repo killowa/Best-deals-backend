@@ -6,12 +6,18 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :products, :histories, :favorites, :ratings
+      resources :products, :histories, :ratings
       resources :websites, only: :index
       resources :users, only: :create do
         collection do
           post 'login'
           post 'logout'
+        end
+      end
+
+      resources :favorites do
+        collection do
+          post 'destroy'
         end
       end
 
