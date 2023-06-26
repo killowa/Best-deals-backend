@@ -19,12 +19,17 @@ scrappingFiles = ['websites.' + f.split('.')[0] for f in listdir(
 
 SEARCH_KEYS = ' '.join(sys.argv[1:])
 # SEARCH_KEYS = "dell g15"
-options = Options()
+#options = Options()
 # options.add_argument('--headless=new') # use headless mode
-driver = webdriver.Chrome(service=Service(
-    ChromeDriverManager().install()), options=options)
 
+#driver = webdriver.Chrome(executable_path='D:\Downloads\chromedriver_win32\chromedriver', options=options)
+options = webdriver.ChromeOptions()
 
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+driver = webdriver.Chrome(
+    service= Service('D:\Downloads\chromedriver_win32\chromedriver'), 
+    options=options,
+)
 products = []
 
 # n is the maximum number of products to scrape from each website
