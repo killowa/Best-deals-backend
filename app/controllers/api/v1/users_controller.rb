@@ -9,8 +9,12 @@ module Api
         user = User.find_by(email: params[:email].downcase)
         if user&.authenticate(params[:password])
           render json: { user: user, token: user.auth_token }, status: :ok
+        elsif user.nil?
+          # error 404
+          render json: { error: I18n.t('messages.user_not_found') }, status: :not_found
         else
-          render json: { error: I18n.t('messages.authentication') }, status: :unprocessable_entity
+          # error 401
+          render json: { error: I18n.t('messages.authentication') }, status: :unauthorized
         end
       end
 
