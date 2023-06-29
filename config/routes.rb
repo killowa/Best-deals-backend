@@ -14,7 +14,13 @@ Rails.application.routes.draw do
           post 'logout'
         end
       end
-
+      resources :passwords, only: [] do
+        collection do
+          post :forgot
+          post :validation
+          post :reset
+        end
+      end
       resources :favorites do
         collection do
           post 'destroy'
