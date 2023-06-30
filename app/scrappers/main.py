@@ -19,9 +19,16 @@ scrappingFiles = ['websites.' + f.split('.')[0] for f in listdir(
 SEARCH_KEYS = ' '.join(sys.argv[1:])
 # SEARCH_KEYS = "dell g15"
 options = webdriver.ChromeOptions()
-options.add_argument('--headless=new')  # use headless mode
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')
+options.add_argument('--no-sandbox')
+# options.add_argument('--remote-debugging-port=9222')
+
 driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
+# options.add_argument('--headless=new')  # use headless mode
+# driver = webdriver.Chrome(service=Service(
+#     ChromeDriverManager().install()), options=options)
 
 products = []
 
