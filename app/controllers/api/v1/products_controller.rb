@@ -94,6 +94,8 @@ class Api::V1::ProductsController < ApplicationController
           )
           @new_scraped_product.save!
         end
+
+        puts("Scrapped products: #{@scraped_products}") 
      
     end
 

@@ -9,7 +9,7 @@ def scrap(driver, search_key, num_of_products):
     # get whole html then parse it
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-    print('Noon')
+    print('Noon source: ', soup)
 
     # product_containers = fetchElements(
     # driver, "span[class='sc-5e739f1b-0 gEERDr wrapper productContainer  ']")
