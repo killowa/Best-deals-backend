@@ -16,7 +16,7 @@ WEBSITES_PATH = get_file_path('websites')
 scrappingFiles = ['websites.' + f.split('.')[0] for f in listdir(
     WEBSITES_PATH) if isfile(join(WEBSITES_PATH, f))]
 
-print(scrappingFiles)
+print('SCRAPING: ', scrappingFiles)
 
 SEARCH_KEYS = ' '.join(sys.argv[1:])
 # SEARCH_KEYS = "dell g15"
@@ -47,7 +47,7 @@ productsData = []
 for product in products:
     productsData.append(json.loads(product.toJson()))
 
-print(productsData)
+print('All: ', productsData)
 
 # quit driver
 driver.quit()
