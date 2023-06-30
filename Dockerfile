@@ -26,7 +26,7 @@ COPY . .
 
 # VOLUME /app
 
-EXPOSE 3000
+EXPOSE 8080
 
 # CMD ["rails", "s", "-b", "0.0.0.0", "-p", "3000"]
-CMD ["rails", "s", "-b", "0.0.0.0", "-p", "3000"]
+CMD ["rails", "s", "-b", "0.0.0.0", "-p", "8080"]
