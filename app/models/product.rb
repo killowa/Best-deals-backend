@@ -1,19 +1,12 @@
 class Product < ApplicationRecord
     has_many :histories
     has_many :users, through: :histories
-    
-    def self.products_without_img_url
-        where(img_url: "")
-      end
-    def self.product_with_img_url
-        where.not(img_url: "").first
-    end
-    def self.update_products_without_img_url
-        product_with_img_url = product_with_img_url()
-        products_without_img_url.each do |product|
-          product.update(img_url: product_with_img_url.img_url)
-        end
-    end
+    belongs_to :search_keyword
+  
+    validates :price, :link, :img_url, :score, :name, :rating, :reviews_count, presence: true
+    validates :rating, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
+    validates :score, numericality: { greater_than_or_equal_to: -1, less_than_or_equal_to: 1 }
+
     # belongs_to :website
     # after_create :create_search_keyword
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_09_133020) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_21_183911) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,6 +43,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_133020) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "score"
+    t.bigint "search_keyword_id"
+    t.index ["search_keyword_id"], name: "index_products_on_search_keyword_id"
+  end
+
+  create_table "ratings", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "search_keywords", force: :cascade do |t|
@@ -71,4 +80,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_133020) do
   add_foreign_key "favorites", "users"
   add_foreign_key "histories", "products"
   add_foreign_key "histories", "users"
+  add_foreign_key "products", "search_keywords"
 end

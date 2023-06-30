@@ -70,7 +70,20 @@ class Api::V1::ProductsController < ApplicationController
         end
         @scraped_products = JSON.parse(scraped_products)
 
+        # Create a new search item in searches table
+        @search_keyword = SearchKeyword.create!(search_key: params[:search_key], website_name: "all")
+        @search_keyword.save!
+
         # Create an array of Product objects from the parsed JSON data
+
+        products_with_no_img, products_with_img = @scraped_products.partition { |product| product['imageUrl'].empty? }
+        if(products_with_img.size == 0)
+          products_with_no_img.each { |product| product['imageUrl'] = "https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg" }
+        else
+          products_with_no_img.each { |product| product['imageUrl'] = products_with_img.sample['imageUrl'] }
+        end
+
+
         @scraped_products.each do |item|
           @new_scraped_product = Product.new(
             name: item['header'],
@@ -80,16 +93,13 @@ class Api::V1::ProductsController < ApplicationController
             reviews_count: item['reviewsCount'],
             img_url: item['imageUrl'],
             source: item['source'],
-            score: item['score']
-          )          
+            score: item['score'],
+            search_keyword_id: @search_keyword.id
+          )
           @new_scraped_product.save!
         end
-
-        # Create a new search item in searches table
-        @search_keyword = SearchKeyword.create!(search_key: params[:search_key], website_name: "all")
-        @search_keyword.save!
+     
     end
-      Product.update_products_without_img_url
 
       json_response(@scraped_products)
     end

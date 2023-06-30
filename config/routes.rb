@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :products, :histories, :favorites
+      resources :products, :histories, :ratings
       resources :websites, only: :index
       resources :users, only: :create do
         collection do
@@ -14,8 +14,21 @@ Rails.application.routes.draw do
           post 'logout'
         end
       end
+      resources :passwords, only: [] do
+        collection do
+          post :forgot
+          post :validation
+          post :reset
+        end
+      end
+      resources :favorites do
+        collection do
+          post 'destroy'
+        end
+      end
 
       get "searches", to: "search_keywords#index"
+
       end
   end
 
