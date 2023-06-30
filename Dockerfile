@@ -28,4 +28,4 @@ COPY . .
 
 EXPOSE 80
 
-CMD ["rails", "s", "-b", "0.0.0.0"]
+# CMD ["rails", "s", "-b", "0.0.0.0"]
