@@ -30,3 +30,4 @@
 
 .env
 dump.rdb
+/config/credentials/production.key
