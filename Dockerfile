@@ -26,6 +26,8 @@ COPY . .
 
 # VOLUME /app
 
-EXPOSE 80
+EXPOSE 3000
 
-# CMD ["rails", "s", "-b", "0.0.0.0"]
+# CMD ["rails", "s", "-b", "0.0.0.0", "-p", "3000"]
+CMD ["rails", "s", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
+
