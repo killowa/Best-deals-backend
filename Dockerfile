@@ -8,7 +8,7 @@ RUN apt-get update --fix-missing && apt-get install -y --no-install-recommends a
 RUN apt-get install -y vim
 RUN apt install python3
 RUN apt -y install python3-pip
-RUN apt -y install postgresql postgresql-client
+# RUN apt -y install postgresql postgresql-client
 RUN apt install sudo
 RUN apt-get update && \
     apt-get install -y wget gnupg && \
