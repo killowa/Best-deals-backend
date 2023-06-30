@@ -24,7 +24,7 @@ RUN pip install -r requirments.txt
 
 COPY . .
 
-VOLUME /app
+# VOLUME /app
 
 EXPOSE 80
 
