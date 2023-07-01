@@ -7,6 +7,7 @@ from Heuristic import Heuristic
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from websites.amazon import scrap as amazon_scrap
 
 ROOT_DIR = 'app/scrappers'
 sys.path.append(ROOT_DIR)
@@ -20,30 +21,41 @@ scrappingFiles = ['websites.' + f.split('.')[0] for f in listdir(
 
 SEARCH_KEYS = ' '.join(sys.argv[1:])
 # PROXY='http://154.236.177.123:1981'
-PROXY='http:/154.236.179.227:1981'
+# PROXY='http:/154.236.179.227:1981'
 
-webdriver.DesiredCapabilities.CHROME['proxy'] = {
-    "httpProxy": PROXY,
-    "sslProxy": PROXY,
-    "proxyType": "MANUAL",
-}
+# webdriver.DesiredCapabilities.CHROME['proxy'] = {
+#     "httpProxy": PROXY,
+#     "sslProxy": PROXY,
+#     "proxyType": "MANUAL",
+# }
 # SEARCH_KEYS = "dell g15"
+products = []
+
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
-options.add_argument('--disable-gpu')
+# options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 # options.add_argument('--remote-debugging-port=9222')
 
 driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
+
+products += amazon_scrap(driver, SEARCH_KEYS, num_of_products=10)
+
+driver.quit()
+
+options.add_argument(f'--proxy-server=http://41.65.227.103:1976')
+driver = webdriver.Chrome(service=Service(
+    ChromeDriverManager().install()), options=options)
+
 # options.add_argument('--headless=new')  # use headless mode
 # driver = webdriver.Chrome(service=Service(
 #     ChromeDriverManager().install()), options=options)
 
-products = []
 
 # n is the maximum number of products to scrape from each website
 for scrappingFile in scrappingFiles:
+    if scrappingFile.find('amazon') != -1: continue
     products += __import__(scrappingFile, fromlist=['scrap']).scrap(
         driver, SEARCH_KEYS, num_of_products=10)
 
@@ -55,7 +67,7 @@ productsData = []
 for product in products:
     productsData.append(json.loads(product.toJson()))
 
-print('All: ', productsData)
+print(productsData)
 
 # quit driver
-driver.quit()
+# driver.quit()

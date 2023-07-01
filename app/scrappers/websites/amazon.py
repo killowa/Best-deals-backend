@@ -10,7 +10,7 @@ def scrap(driver, search_keys, num_of_products):
                search_keys.replace(" ", "+"))
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-    print('Amazon source', soup)
+    # print('Amazon source', soup)
 
     search_results = soup.select('[data-component-type="s-search-result"]')
     # search_results = result.select_ones '[data-component-type="s-search-result"]')
@@ -54,7 +54,7 @@ def scrap(driver, search_keys, num_of_products):
             reviewsCount.replace(',', '')), imageUrl, header, 'amazon', link)
         products.append(product)
 
-    print('Amazon: ', products)
+    # print('Amazon: ', products)
     
 
     return products
