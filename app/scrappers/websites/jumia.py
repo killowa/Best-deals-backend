@@ -14,6 +14,8 @@ def scrap(driver, search_key, num_of_products):
     driver.get(search_link)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
+    print('Jumia source: ', soup)
+
     product_containers = soup.select('.prd._fb.col.c-prd')
     # slice the first n products
     product_containers = product_containers[:num_of_products]
@@ -66,5 +68,7 @@ def scrap(driver, search_key, num_of_products):
     # create list of Product objects
     products = [Product(prices[i], ratings[i], reviews_count[i], imgs[i], headers[i], "jumia", links[i]
                         ) for i in range(len(product_containers))]
+    
+    print('Jumia: ', products)
 
     return products
