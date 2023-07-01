@@ -28,6 +28,9 @@ class Api::V1::ProductsController < ApplicationController
 
       @products = @search.result.page(params[:page]).per(params[:per_page])
 
+      # send total number of products in the response
+      response.headers['X-Total-Count'] = @products.total_count
+      
       json_response(@products)
     end
   
@@ -97,6 +100,8 @@ class Api::V1::ProductsController < ApplicationController
      
     end
 
+      # include total number of products in the response
+      response.headers['X-Total-Count'] = @scraped_products.size
       json_response(@scraped_products)
     end
   
