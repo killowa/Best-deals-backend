@@ -16,9 +16,17 @@ WEBSITES_PATH = get_file_path('websites')
 scrappingFiles = ['websites.' + f.split('.')[0] for f in listdir(
     WEBSITES_PATH) if isfile(join(WEBSITES_PATH, f))]
 
-print('SCRAPING: ', scrappingFiles)
+# print('SCRAPING: ', scrappingFiles)
 
 SEARCH_KEYS = ' '.join(sys.argv[1:])
+# PROXY='http://154.236.177.123:1981'
+PROXY='http:/154.236.179.227:1981'
+
+webdriver.DesiredCapabilities.CHROME['proxy'] = {
+    "httpProxy": PROXY,
+    "sslProxy": PROXY,
+    "proxyType": "MANUAL",
+}
 # SEARCH_KEYS = "dell g15"
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
@@ -47,7 +55,7 @@ productsData = []
 for product in products:
     productsData.append(json.loads(product.toJson()))
 
-print('All: ', productsData)
+print(productsData)
 
 # quit driver
 driver.quit()
