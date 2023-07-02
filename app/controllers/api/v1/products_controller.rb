@@ -69,9 +69,10 @@ class Api::V1::ProductsController < ApplicationController
         end
         @scraped_products = JSON.parse(scraped_products)
 
-        # Create a new search item in searches table
-        @search_keyword = SearchKeyword.create!(search_key: params[:search_key], website_name: "all")
-        @search_keyword.save!
+        for website in Website.all
+          @search_keyword = SearchKeyword.create!(search_key: params[:search_key], website_name: website.name)
+          @search_keyword.save!
+        end
 
         # Create an array of Product objects from the parsed JSON data
 
